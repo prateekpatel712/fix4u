@@ -83,7 +83,7 @@ export default function AiBookingAgent() {
 
         {/* Service Hero */}
         <section className="relative overflow-hidden pt-28 pb-20 border-b border-white/[0.05]">
-          <div className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-6 relative z-10">
+          <div className="max-w-7xl mx-auto px-6 text-center flex flex-col items-center gap-6 relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-coral text-xs font-mono font-semibold uppercase tracking-wider">
               <Bot className="w-3.5 h-3.5 text-coral" /> Hero Service Offer
             </div>
@@ -179,7 +179,7 @@ export default function AiBookingAgent() {
         </section>
 
         {/* Risk Reversal Guarantee */}
-        <section className="py-24 border-b border-white/[0.05] max-w-5xl mx-auto px-6 text-center relative z-10">
+        <section className="py-24 border-b border-white/[0.05] max-w-7xl mx-auto px-6 text-center relative z-10">
           <div 
             className="border border-coral/30 bg-coral/5 rounded-[32px] p-8 md:p-12 flex flex-col items-center gap-6 max-w-3xl mx-auto shadow-2xl"
             style={{ boxShadow: "0 30px 60px -20px rgba(0,0,0,0.5), inset 0 0 25px rgba(255, 86, 64, 0.03)" }}
@@ -201,7 +201,7 @@ export default function AiBookingAgent() {
         </section>
 
         {/* Action CTA Block */}
-        <section className="py-24 max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-6 relative z-10">
+        <section className="py-24 max-w-7xl mx-auto px-6 text-center flex flex-col items-center gap-6 relative z-10">
           <h2 className="font-display font-black text-3xl md:text-5xl text-paper leading-tight">
             Stop losing bookings to delayed replies.
           </h2>

@@ -37,7 +37,7 @@ export default function ContactPage() {
       <Header />
 
       <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Contact details */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}

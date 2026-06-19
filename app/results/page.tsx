@@ -62,7 +62,7 @@ export default function ResultsPage() {
       <Header />
 
       <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-6xl mx-auto flex flex-col items-center text-center gap-6 mb-16">
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-6 mb-16">
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -90,7 +90,7 @@ export default function ResultsPage() {
         </div>
 
         {/* Case Studies Grid */}
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           {caseStudies.map((cs, idx) => (
             <motion.div 
               key={idx}

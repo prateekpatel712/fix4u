@@ -11,7 +11,7 @@ export default function CookiesPage() {
       <Header />
 
       <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <article className="max-w-3xl mx-auto border border-white/[0.05] bg-white/[0.01] backdrop-blur-2xl rounded-[32px] p-8 md:p-12 shadow-2xl space-y-6 text-grey-dark text-sm sm:text-base leading-relaxed">
+        <article className="max-w-7xl mx-auto border border-white/[0.05] bg-white/[0.01] backdrop-blur-2xl rounded-[32px] p-8 md:p-12 shadow-2xl space-y-6 text-grey-dark text-sm sm:text-base leading-relaxed">
           <h1 className="font-display font-black text-3xl sm:text-4xl text-paper tracking-tight mb-8 border-b border-white/[0.05] pb-4 uppercase">
             Cookie Policy
           </h1>

@@ -32,7 +32,7 @@ export default function AboutPage() {
       <Header />
 
       <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-4xl mx-auto space-y-16">
+        <div className="max-w-7xl mx-auto space-y-16">
           {/* Hero section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
