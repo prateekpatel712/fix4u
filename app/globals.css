@@ -1,26 +1,621 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Neue Corp";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/PPNeueCorp-CompactRegular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Neue Corp";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/PPNeueCorp-CompactMedium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Neue Corp";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/PPNeueCorp-CompactSemibold.woff2") format("woff2"),
+       url("/fonts/PPNeueCorp-CompactSemibold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Neue Corp";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/PPNeueCorp-CompactBold.woff") format("woff");
+}
+
+@theme {
+  --color-ink: #070709;
+  --color-coral: #FF5640;
+  --color-violet: #8B5CF6;
+  --color-emerald: #10B981;
+  --color-grey: #C7C5C0;
+  --color-grey-dark: #8F8D88;
+  --color-paper: #F3F1EC;
+
+  --font-sans: var(--font-sans), sans-serif;
+  --font-display: "Neue Corp", sans-serif;
+  --font-mono: var(--font-mono), monospace;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #070709;
+  --foreground: #F3F1EC;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom styles and layout tokens */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Smooth Scrolling & Custom Utilities */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Grid Backdrops */
+.grid-lines {
+  background-image: none;
+  background-size: 30px 30px;
+}
+
+.grid-lines-dense {
+  background-image: none;
+  background-size: 15px 15px;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-coral {
+  background: rgba(255, 86, 64, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 86, 64, 0.1);
+}
+
+.glass-panel-violet {
+  background: rgba(139, 92, 246, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+/* Glowing background meshes */
+.mesh-gradient {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 86, 64, 0.15), transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15), transparent 40%);
+}
+
+.glow-overlay-coral {
+  box-shadow: 0 0 40px -10px rgba(255, 86, 64, 0.25);
+}
+
+.glow-overlay-violet {
+  box-shadow: 0 0 40px -10px rgba(139, 92, 246, 0.25);
+}
+
+/* Technical aesthetics */
+.border-outline {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.border-outline-active {
+  border: 1px solid #FF5640;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070709;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5640;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.05);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-pulse-glow {
+  animation: pulseGlow 6s infinite ease-in-out;
 }
+
+@keyframes drift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-drift {
+  background-size: 200% 200%;
+  animation: drift 15s infinite linear;
+}
+
+.animate-spin-slow {
+  animation: spin 20s linear infinite;
+}
+
+/* Premium Sliding Hover Buttons */
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s, border-color 0.3s;
+}
+
+.button--black {
+  background-color: #FF5640; /* brand coral */
+  color: #070709; /* ink */
+  border: 1px solid transparent;
+}
+
+.button--black:hover {
+  background-color: #F3F1EC; /* paper */
+  transform: scale(1.02);
+}
+
+.button--ghost-black {
+  background-color: rgba(255, 255, 255, 0.02);
+  color: #F3F1EC; /* paper */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.button--ghost-black:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.button__text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 18px;
+  overflow: hidden;
+}
+
+.button__text--sp {
+  display: block;
+  height: 18px;
+  line-height: 18px;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.button:hover .button__text--sp--1 {
+  transform: translateY(-100%);
+}
+
+.button:hover .button__text--sp--2 {
+  transform: translateY(-100%);
+}
+
+/* Double icon sliding reveal */
+.button__icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.button__icon__inner {
+  height: 12px;
+  width: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.button:hover .button__icon__inner {
+  transform: translateY(-100%);
+}
+
+.button__arrow {
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-arrow {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* Hamburger Menu Icon & Split Hover Compartment */
+.menu__trigger {
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: stretch !important;
+  overflow: hidden;
+}
+
+.menu__trigger .menu__text-container {
+  height: 100%;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu__trigger:hover .menu__text-container {
+  background-color: #F3F1EC;
+  color: #0C0B11;
+}
+
+.menu__trigger.h-\[36px\] .button__text {
+  width: 111.3px;
+  height: 16.11px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 14.2188px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+
+.menu__trigger.h-\[36px\] .button__text .button__text--sp {
+  height: 16.11px;
+  line-height: 16.11px;
+  padding: 0 0 1.89583px;
+}
+
+.menu__trigger .menu__icon {
+  margin-left: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: transparent;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  position: relative;
+  overflow: hidden;
+  color: #F3F1EC; /* paper */
+}
+
+/* On hover, divider and icon compartment border */
+.menu__trigger:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.menu__trigger:hover .menu__icon {
+  background-color: #FF5640; /* brand coral hover */
+  border-left-color: rgba(255, 255, 255, 0.2);
+  color: #070709; /* ink lines */
+}
+
+.menu__trigger.h-\[36px\] .menu__icon {
+  width: 36px;
+}
+
+.menu__trigger.h-\[36px\] .menu__icon__inner {
+  width: 14px;
+  height: 6px;
+}
+
+.menu__icon__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.menu__icon--line {
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transition: transform 0.3s;
+}
+
+/* Custom Sliding Icon Animations (Left to Right) for both Contact & Menu */
+.contact__trigger .button__icon,
+.menu__trigger .button__icon {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+}
+
+.contact__trigger .button__icon {
+  width: 12px;
+  height: 12px;
+}
+
+.menu__trigger .button__icon {
+  width: 14px;
+  height: 6px;
+}
+
+.contact__trigger .button__icon__inner,
+.menu__trigger .menu__icon__inner {
+  flex-shrink: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact__trigger .button__icon__inner {
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu__trigger .menu__icon__inner {
+  width: 14px;
+  height: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.contact__trigger .button__icon__inner--2 {
+  position: absolute;
+  left: -100%;
+  top: 0;
+}
+
+.menu__trigger .menu__icon__inner--2 {
+  position: absolute;
+  left: -100%;
+  top: 0;
+}
+
+.contact__trigger:hover .button__icon__inner,
+.menu__trigger:hover .menu__icon__inner {
+  transform: translateX(100%) !important;
+}
+
+/* Overrides for bg-coral Hero section to match Enerblock style */
+.bg-coral.grid-lines, .bg-coral .grid-lines {
+  background-image: 
+    linear-gradient(to right, rgba(7, 7, 9, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(7, 7, 9, 0.15) 1px, transparent 1px);
+}
+
+.bg-coral .menu__trigger {
+  border-color: #070709 !important;
+  color: #070709 !important;
+  background-color: transparent !important;
+}
+
+.bg-coral .menu__trigger:hover {
+  border-color: #070709 !important;
+  background-color: transparent !important;
+}
+
+.bg-coral .menu__trigger .menu__icon {
+  border-left-color: #070709 !important;
+  color: #070709;
+}
+
+.bg-coral .menu__trigger:hover .menu__icon {
+  background-color: #070709 !important;
+  border-left-color: #070709 !important;
+  color: #F3F1EC !important;
+}
+
+.bg-coral .menu__trigger:hover .menu__text-container {
+  background-color: transparent !important;
+  color: #070709 !important;
+}
+
+.bg-coral .contact__trigger {
+  background-color: #0C0B11 !important;
+  color: #F3F1EC !important;
+  border-color: transparent !important;
+}
+
+.contact__trigger .contact__icon {
+  height: 100%;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid #070709;
+  background-color: transparent;
+  color: #F3F1EC;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.contact__trigger:hover .contact__icon {
+  background-color: #FF5640 !important;
+  color: #070709 !important;
+}
+
+.contact__trigger:hover {
+  background-color: #0C0B11 !important;
+  color: #F3F1EC !important;
+}
+
+/* Contact Button Custom Typography & Alignment to match Menu */
+.contact__trigger .button__text {
+  height: 16.11px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 14.2188px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+
+.contact__trigger .button__text .button__text--sp {
+  height: 16.11px;
+  line-height: 16.11px;
+  padding: 0 0 1.89583px;
+}
+
+/* Contact & Menu Button Custom Animations */
+.contact__trigger .button__text--sp--2,
+.menu__trigger .button__text--sp--2 {
+  position: absolute;
+  left: 0;
+  top: -100%; /* positioned above */
+}
+
+/* Override vertical text translation to slide top-to-bottom */
+.contact__trigger:hover .button__text--sp--1,
+.menu__trigger:hover .button__text--sp--1 {
+  transform: translateY(100%) !important;
+}
+
+.contact__trigger:hover .button__text--sp--2,
+.menu__trigger:hover .button__text--sp--2 {
+  transform: translateY(100%) !important;
+}
+
+/* Exact branding logo positioning at the top-left corner of the page */
+@media (min-width: 1024px) {
+  .logo-container {
+    padding-top: 21.333px !important;
+    padding-left: 26.667px !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Scaled up Menu and Contact triggers matching the logo box model */
+  .bg-coral .menu__trigger-wrapper {
+    padding-top: 21.333px !important;
+    padding-bottom: 21.333px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-top: -21.333px !important;
+    margin-bottom: -21.333px !important;
+    margin-left: 0 !important;
+    margin-right: 12px !important;
+    display: flex !important;
+    align-items: stretch !important;
+  }
+  
+  .bg-coral .header__nav__item--contact {
+    padding-top: 21.333px !important;
+    padding-bottom: 21.333px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-top: -21.333px !important;
+    margin-bottom: -21.333px !important;
+    margin-left: 12px !important;
+    margin-right: 0 !important;
+    display: flex !important;
+    align-items: stretch !important;
+  }
+  
+  .bg-coral .menu__trigger,
+  .bg-coral .contact__trigger {
+    height: 52.656px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Square icon compartments */
+  .bg-coral .menu__trigger .menu__icon,
+  .bg-coral .contact__trigger .contact__icon {
+    width: 52.656px !important;
+  }
+  
+  /* Larger typography for button labels */
+  .bg-coral .menu__trigger .button__text,
+  .bg-coral .contact__trigger .button__text {
+    font-size: 21px !important;
+    height: 24px !important;
+    width: auto !important;
+  }
+  
+  .bg-coral .menu__trigger .button__text .button__text--sp,
+  .bg-coral .contact__trigger .button__text .button__text--sp {
+    height: 24px !important;
+    line-height: 24px !important;
+  }
+  
+  /* Larger arrow icon inside Contact button */
+  .bg-coral .contact__trigger .button__icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .bg-coral .contact__trigger .button__icon__inner {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .bg-coral .contact__trigger .button__arrow {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Larger hamburger menu icon inside Menu button */
+  .bg-coral .menu__trigger .button__icon {
+    width: 20px !important;
+    height: 8px !important;
+  }
+  
+  .bg-coral .menu__trigger .menu__icon__inner {
+    width: 20px !important;
+    height: 8px !important;
+  }
+}
+
+/* Custom icon transitions are consolidated above */
