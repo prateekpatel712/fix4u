@@ -61,113 +61,126 @@ export default function ResultsPage() {
 
       <Header />
 
-      <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-6 mb-16">
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-coral text-xs font-mono font-semibold uppercase tracking-wider"
-          >
-            <Trophy className="w-3.5 h-3.5 text-coral" /> Pilot Proof
-          </motion.div>
-          
-          <AnimatedTitle
-            lines={[
-              <span key="1">Our Case Studies</span>
-            ]}
-            className="font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-paper leading-[1.1]"
-          />
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-grey-dark text-base sm:text-lg max-w-2xl leading-relaxed"
-          >
-            Real metrics. Real return on investment. Explore how local businesses plug the leaks in their customer funnels using custom-trained AI agents.
-          </motion.p>
-        </div>
+      <main className="flex-grow font-sans relative z-10 w-full">
+        {/* Header Block */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 w-full border-b border-white/10">
+          <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col gap-6 justify-center items-start">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-coral text-xs font-mono font-semibold uppercase tracking-wider">
+              <Trophy className="w-3.5 h-3.5 text-coral" /> Pilot Proof
+            </div>
+            <AnimatedTitle
+              lines={[
+                <span key="1">Our Case Studies</span>
+              ]}
+              className="font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-paper leading-[1.1] uppercase"
+            />
+          </div>
+
+          <div className="lg:col-span-7 p-8 lg:p-16 flex items-center justify-center bg-white/[0.005]">
+            <p className="text-grey-dark text-base sm:text-lg leading-relaxed max-w-md">
+              Real metrics. Real return on investment. Explore how local businesses plug the leaks in their customer funnels using custom-trained AI agents.
+            </p>
+          </div>
+        </section>
 
         {/* Case Studies Grid */}
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          {caseStudies.map((cs, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 + idx * 0.1 }}
-              className="border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl p-8 flex flex-col justify-between gap-8 group hover:border-coral/25 transition-all duration-500 shadow-2xl relative overflow-hidden"
-            >
-              {/* Subtle hover background highlight */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-coral/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <section className="grid grid-cols-1 lg:grid-cols-12 w-full border-b border-white/10">
+          <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-start space-y-3">
+            <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">
+              CASE DIRECTORY
+            </span>
+            <h2 className="font-display font-black text-3xl md:text-5xl text-paper tracking-tight leading-[1.05] uppercase">
+              Active case files
+            </h2>
+          </div>
 
-              <div className="flex flex-col gap-4 relative z-10">
-                <div className="flex justify-between items-center text-[10px] text-grey-dark font-mono uppercase tracking-wider">
-                  <span>{cs.category}</span>
-                  <span>{cs.date}</span>
-                </div>
-                
-                <h3 className="font-display font-bold text-2xl text-paper leading-tight group-hover:text-coral transition-colors duration-300">
-                  <Link href={`/results/${cs.slug}`}>
-                    {cs.title}
-                  </Link>
-                </h3>
-
-                <p className="text-grey-dark text-xs sm:text-sm leading-relaxed mt-2">
-                  {cs.desc}
-                </p>
-
-                {/* Metric callout */}
-                <div className="bg-coral/[0.02] border border-coral/10 rounded-2xl p-4 my-2 flex items-center justify-between backdrop-blur-md">
-                  <div>
-                    <span className="text-[10px] text-grey-dark uppercase tracking-wider font-mono">Hero Result</span>
-                    <div className="text-2xl font-display font-black text-coral mt-0.5">{cs.metric}</div>
-                  </div>
-                  <span className="text-[10px] text-grey-dark max-w-[120px] text-right font-sans leading-tight">
-                    {cs.metricSub}
-                  </span>
-                </div>
-
-                {/* Substats */}
-                <div className="grid grid-cols-3 gap-2 border-t border-white/[0.05] pt-6 mt-2">
-                  {cs.results.map((r, rIdx) => (
-                    <div key={rIdx} className="text-center md:text-left">
-                      <span className="text-[9px] text-grey-dark uppercase tracking-wider font-mono block">
-                        {r.label}
-                      </span>
-                      <span className="font-display font-bold text-base text-paper block mt-1">
-                        {r.val}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <Link
-                href={`/results/${cs.slug}`}
-                className="relative z-10 inline-flex items-center gap-1.5 text-xs font-bold text-paper group-hover:text-coral transition-colors font-mono uppercase tracking-wider mt-4"
+          <div className="lg:col-span-7 p-8 lg:p-16 flex flex-col gap-8 bg-white/[0.005]">
+            {caseStudies.map((cs, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 + idx * 0.1 }}
+                className="border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl p-8 flex flex-col justify-between gap-8 group hover:border-coral/25 transition-all duration-500 shadow-2xl relative overflow-hidden"
               >
-                View breakdown <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+                {/* Subtle hover background highlight */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-coral/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                <div className="flex flex-col gap-4 relative z-10">
+                  <div className="flex justify-between items-center text-[10px] text-grey-dark font-mono uppercase tracking-wider">
+                    <span>{cs.category}</span>
+                    <span>{cs.date}</span>
+                  </div>
+                  
+                  <h3 className="font-display font-bold text-2xl text-paper leading-tight group-hover:text-coral transition-colors duration-300">
+                    <Link href={`/results/${cs.slug}`}>
+                      {cs.title}
+                    </Link>
+                  </h3>
+
+                  <p className="text-grey-dark text-xs sm:text-sm leading-relaxed mt-2">
+                    {cs.desc}
+                  </p>
+
+                  {/* Metric callout */}
+                  <div className="bg-coral/[0.02] border border-coral/10 rounded-2xl p-4 my-2 flex items-center justify-between backdrop-blur-md">
+                    <div>
+                      <span className="text-[10px] text-grey-dark uppercase tracking-wider font-mono">Hero Result</span>
+                      <div className="text-2xl font-display font-black text-coral mt-0.5">{cs.metric}</div>
+                    </div>
+                    <span className="text-[10px] text-grey-dark max-w-[120px] text-right font-sans leading-tight">
+                      {cs.metricSub}
+                    </span>
+                  </div>
+
+                  {/* Substats */}
+                  <div className="grid grid-cols-3 gap-2 border-t border-white/[0.05] pt-6 mt-2">
+                    {cs.results.map((r, rIdx) => (
+                      <div key={rIdx} className="text-center md:text-left">
+                        <span className="text-[9px] text-grey-dark uppercase tracking-wider font-mono block">
+                          {r.label}
+                        </span>
+                        <span className="font-display font-bold text-base text-paper block mt-1">
+                          {r.val}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  href={`/results/${cs.slug}`}
+                  className="relative z-10 inline-flex items-center gap-1.5 text-xs font-bold text-paper group-hover:text-coral transition-colors font-mono uppercase tracking-wider mt-4"
+                >
+                  View breakdown <ArrowUpRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
         {/* Action Call */}
-        <section className="max-w-3xl mx-auto text-center mt-24 flex flex-col items-center gap-6 relative z-10">
-          <h2 className="font-display font-black text-2xl md:text-4xl text-paper leading-tight">
-            Want to see these numbers for your own business?
-          </h2>
-          <p className="text-grey-dark text-sm sm:text-base leading-relaxed">
-            Get a tailored analysis of your funnel response times. We will build a test agent for your specific menu and show you exactly what is possible.
-          </p>
-          <Link
-            href="/book"
-            className="inline-flex items-center gap-1.5 bg-coral text-ink font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-xl hover:scale-[1.02] transition-all"
-          >
-            Book your discovery call <ArrowUpRight className="w-4 h-4" />
-          </Link>
+        <section className="grid grid-cols-1 lg:grid-cols-12 w-full">
+          <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-center space-y-3">
+            <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">
+              ACQUISITION REVIEW
+            </span>
+            <h2 className="font-display font-black text-3xl md:text-5xl text-paper tracking-tight leading-[1.05] uppercase">
+              Want to see these numbers?
+            </h2>
+          </div>
+
+          <div className="lg:col-span-7 p-8 lg:p-16 flex flex-col justify-center gap-6 bg-white/[0.005]">
+            <p className="text-grey-dark text-sm sm:text-base leading-relaxed max-w-md">
+              Get a tailored analysis of your funnel response times. We will build a test agent for your specific menu and show you exactly what is possible.
+            </p>
+            <Link
+              href="/book"
+              className="inline-flex items-center justify-center gap-1.5 bg-coral text-ink font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-xl hover:scale-[1.02] transition-all w-full sm:w-auto"
+            >
+              Book your discovery call <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
         </section>
       </main>
 

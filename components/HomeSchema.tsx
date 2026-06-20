@@ -42,13 +42,13 @@ export default function HomeSchema() {
   }, [steps.length]);
 
   return (
-    <section className="py-24 border-b border-white/[0.05] bg-ink relative overflow-hidden">
+    <section className="border-b border-white/10 bg-ink relative overflow-hidden w-full">
       {/* Background radial glow */}
       <div className="absolute top-1/2 right-1/4 w-[350px] h-[350px] bg-violet/5 rounded-full blur-[90px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10">
         {/* Left Column: Descriptive Text */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 lg:border-r border-white/10 flex flex-col justify-center p-8 lg:p-16 space-y-6">
           <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">
             SYSTEM BLUEPRINT
           </span>
@@ -60,7 +60,8 @@ export default function HomeSchema() {
           </p>
         </div>
 
-        <div className="lg:col-span-7 border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl p-6 md:p-10 relative overflow-hidden flex flex-col gap-6 shadow-2xl">
+        <div className="lg:col-span-7 flex flex-col justify-center p-8 lg:p-16">
+          <div className="border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl p-6 md:p-10 relative overflow-hidden flex flex-col gap-6 shadow-2xl">
           {/* Blueprint Nodes */}
           <div className="flex flex-col gap-3.5 relative z-10">
             {steps.map((st, idx) => {
@@ -108,6 +109,7 @@ export default function HomeSchema() {
             <span>ACTIVE SEGMENT: {activeStep + 1} / {steps.length}</span>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

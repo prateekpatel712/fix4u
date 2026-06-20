@@ -32,14 +32,14 @@ export default function DemoPage() {
 
       <Header />
 
-      <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <main className="flex-grow font-sans relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 w-full">
           {/* Context Panel */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-6 flex flex-col gap-6 items-start"
+            className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col gap-6 items-start justify-center"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-coral text-xs font-mono font-semibold uppercase tracking-wider">
               <Bot className="w-3.5 h-3.5 text-coral" /> Sandbox Chatbot
@@ -50,10 +50,10 @@ export default function DemoPage() {
                 <span key="1">Experience the AI</span>,
                 <span key="2" className="text-coral italic">Booking Receptionist</span>
               ]}
-              className="font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-paper leading-[1.05]"
+              className="font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-paper leading-[1.05] uppercase"
             />
             
-            <p className="text-grey-dark text-sm sm:text-base leading-relaxed max-w-xl">
+            <p className="text-grey-dark text-sm sm:text-base leading-relaxed max-w-md">
               This is a live simulation of a custom AI assistant built for a local med spa. Try choosing the suggested prompts on the chat screen to experience how the agent handles client intent.
             </p>
 
@@ -92,7 +92,7 @@ export default function DemoPage() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="lg:col-span-6 flex justify-center w-full"
+            className="lg:col-span-7 p-8 lg:p-16 flex justify-center w-full items-center bg-white/[0.005]"
           >
             <ChatDemo />
           </motion.div>

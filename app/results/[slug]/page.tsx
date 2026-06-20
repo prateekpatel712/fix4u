@@ -101,123 +101,125 @@ export default function CaseStudyDetail({ params }: { params: Params }) {
 
       <Header />
 
-      <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          {/* Back button */}
-          <Link
-            href="/results"
-            className="inline-flex items-center gap-2 text-xs text-grey hover:text-coral transition-colors uppercase font-mono tracking-wider mb-8 group"
-          >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Back to case studies
-          </Link>
+      <main className="flex-grow font-sans relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 w-full">
+          {/* Left Column: Title, Metadata & Metrics Dashboard */}
+          <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-start gap-8">
+            {/* Back button */}
+            <Link
+              href="/results"
+              className="inline-flex items-center gap-2 text-xs text-grey hover:text-coral transition-colors uppercase font-mono tracking-wider group"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Back to case studies
+            </Link>
 
-          {/* Heading */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col gap-4 mb-10"
-          >
-            <div className="flex justify-between items-center text-xs text-grey-dark font-mono uppercase tracking-wider">
-              <span>{data.category}</span>
-              <span>{data.date}</span>
-            </div>
-            <h1 className="font-display font-black text-3xl sm:text-4xl md:text-5xl text-paper tracking-tight leading-tight">
-              {data.title}
-            </h1>
-            <p className="text-grey text-xs sm:text-sm font-mono mt-1">
-              Client: <span className="text-paper">{data.client}</span>
-            </p>
-          </motion.div>
-
-          {/* Metrics Dashboard */}
-          <motion.div 
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-5 border border-white/[0.05] rounded-[24px] p-6 bg-white/[0.01] backdrop-blur-2xl mb-12 shadow-2xl"
-          >
-            {data.metrics.map((m, idx) => (
-              <div key={idx} className="flex flex-col items-center justify-center py-4 border-b sm:border-b-0 sm:border-r last:border-0 border-white/[0.05] text-center">
-                <span className="text-[10px] text-grey-dark uppercase tracking-wider font-mono">
-                  {m.label}
-                </span>
-                <span className="font-display font-black text-3xl text-coral mt-1 block">
-                  {m.val}
-                </span>
+            {/* Heading */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-4"
+            >
+              <div className="flex justify-between items-center text-xs text-grey-dark font-mono uppercase tracking-wider">
+                <span>{data.category}</span>
+                <span>{data.date}</span>
               </div>
-            ))}
-          </motion.div>
+              <h1 className="font-display font-black text-3xl sm:text-4xl text-paper tracking-tight leading-tight uppercase">
+                {data.title}
+              </h1>
+              <p className="text-grey text-xs font-mono mt-1">
+                Client: <span className="text-paper">{data.client}</span>
+              </p>
+            </motion.div>
 
-          {/* Detailed Content */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="space-y-10 text-grey-dark leading-relaxed text-sm sm:text-base border-t border-white/[0.05] pt-10"
-          >
-            {/* The Problem */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-              <h3 className="md:col-span-3 font-display font-bold text-lg text-paper flex items-center gap-1.5 uppercase tracking-wide">
-                <DollarSign className="w-4 h-4 text-coral shrink-0" /> The Leak
-              </h3>
-              <div className="md:col-span-9 space-y-4">
+            {/* Metrics Dashboard (Vertical format for left column) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              className="flex flex-col border border-white/[0.05] rounded-[24px] bg-white/[0.01] backdrop-blur-2xl shadow-2xl divide-y divide-white/[0.05]"
+            >
+              {data.metrics.map((m, idx) => (
+                <div key={idx} className="flex flex-col items-start justify-center p-6">
+                  <span className="text-[9px] text-grey-dark uppercase tracking-wider font-mono">
+                    {m.label}
+                  </span>
+                  <span className="font-display font-black text-3xl text-coral mt-1 block">
+                    {m.val}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right Column: Case study breakdown & CTA */}
+          <div className="lg:col-span-7 p-8 lg:p-16 flex flex-col gap-12 bg-white/[0.005]">
+            {/* Detailed Content */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="space-y-10 text-grey-dark leading-relaxed text-sm sm:text-base"
+            >
+              {/* The Problem */}
+              <div className="flex flex-col gap-4">
+                <h3 className="font-display font-bold text-lg text-paper flex items-center gap-1.5 uppercase tracking-wide">
+                  <DollarSign className="w-4 h-4 text-coral shrink-0" /> The Leak
+                </h3>
                 <p>{data.problem}</p>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-500/10 bg-red-500/5 text-red-400 font-mono text-[11px] uppercase tracking-wide">
+                <div className="self-start inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-500/10 bg-red-500/5 text-red-400 font-mono text-[11px] uppercase tracking-wide">
                   Estimated Leak: {data.lostCost}
                 </div>
               </div>
-            </div>
 
-            {/* The Solution */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start border-t border-white/[0.05] pt-10">
-              <h3 className="md:col-span-3 font-display font-bold text-lg text-paper flex items-center gap-1.5 uppercase tracking-wide">
-                <Sparkles className="w-4 h-4 text-coral shrink-0" /> Solution
-              </h3>
-              <div className="md:col-span-9">
+              {/* The Solution */}
+              <div className="flex flex-col gap-4 border-t border-white/[0.05] pt-10">
+                <h3 className="font-display font-bold text-lg text-paper flex items-center gap-1.5 uppercase tracking-wide">
+                  <Sparkles className="w-4 h-4 text-coral shrink-0" /> Solution
+                </h3>
                 <p>{data.solution}</p>
               </div>
-            </div>
 
-            {/* The Quote */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start border-t border-white/[0.05] pt-10">
-              <h3 className="md:col-span-3 font-display font-bold text-lg text-paper flex items-center gap-1.5 uppercase tracking-wide">
-                <TrendingUp className="w-4 h-4 text-coral shrink-0" /> Outcome
-              </h3>
-              <div className="md:col-span-9">
-                <blockquote className="border-l-2 border-coral pl-5 italic text-paper font-serif text-base sm:text-lg">
-                  &ldquo;{data.quote}&rdquo;
-                </blockquote>
-                <cite className="block text-xs text-grey-dark font-mono mt-3 uppercase tracking-wider not-italic">
-                  &mdash; {data.author}
-                </cite>
+              {/* The Quote */}
+              <div className="flex flex-col gap-4 border-t border-white/[0.05] pt-10">
+                <h3 className="font-display font-bold text-lg text-paper flex items-center gap-1.5 uppercase tracking-wide">
+                  <TrendingUp className="w-4 h-4 text-coral shrink-0" /> Outcome
+                </h3>
+                <div>
+                  <blockquote className="border-l-2 border-coral pl-5 italic text-paper font-serif text-base sm:text-lg">
+                    &ldquo;{data.quote}&rdquo;
+                  </blockquote>
+                  <cite className="block text-xs text-grey-dark font-mono mt-3 uppercase tracking-wider not-italic">
+                    &mdash; {data.author}
+                  </cite>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* CTA Box */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="border border-white/[0.05] rounded-[32px] p-8 bg-white/[0.01] backdrop-blur-2xl shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 mt-20 hover:border-coral/25 transition-colors duration-500"
-          >
-            <div>
-              <h3 className="font-display font-bold text-xl text-paper mb-1">
-                Ready to plug the leak in your funnel?
-              </h3>
-              <p className="text-grey-dark text-xs sm:text-sm">
-                Get a custom booking agent demo built for your brand.
-              </p>
-            </div>
-            <Link
-              href="/book"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-coral text-ink font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl hover:scale-[1.02] transition-all shrink-0"
+            {/* CTA Box */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="border border-white/[0.05] rounded-[32px] p-8 bg-white/[0.01] backdrop-blur-2xl shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-coral/25 transition-colors duration-500 w-full"
             >
-              Book a call <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
+              <div>
+                <h3 className="font-display font-bold text-xl text-paper mb-1">
+                  Ready to plug the leak in your funnel?
+                </h3>
+                <p className="text-grey-dark text-xs sm:text-sm">
+                  Get a custom booking agent demo built for your brand.
+                </p>
+              </div>
+              <Link
+                href="/book"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-coral text-ink font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl hover:scale-[1.02] transition-all shrink-0"
+              >
+                Book a call <ArrowUpRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </main>
 

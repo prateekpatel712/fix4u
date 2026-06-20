@@ -18,7 +18,8 @@ export default function ChatDemo() {
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
 
   const suggestedPrompts = [
     "Do you have openings tomorrow?",
@@ -140,7 +141,17 @@ export default function ChatDemo() {
   const [activePrompts, setActivePrompts] = useState<string[]>(suggestedPrompts);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Skip the initial mount so a page refresh never yanks the window down to
+    // this below-the-fold chat. After that, keep the chat panel itself pinned
+    // to the latest message — scroll the container only, not the page.
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const container = chatContainerRef.current;
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    }
   }, [messages, isTyping]);
 
   const handlePromptClick = (prompt: string) => {
@@ -220,7 +231,7 @@ export default function ChatDemo() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.map((msg, idx) => (
           <div
             key={idx}
@@ -278,7 +289,6 @@ export default function ChatDemo() {
             </div>
           </div>
         )}
-        <div ref={chatEndRef} />
       </div>
 
       {/* Suggested Prompts */}

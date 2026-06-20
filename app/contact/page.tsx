@@ -36,14 +36,14 @@ export default function ContactPage() {
 
       <Header />
 
-      <main className="flex-grow font-sans py-28 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <main className="flex-grow font-sans relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 w-full">
           {/* Left Column: Contact details */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 flex flex-col gap-6"
+            className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col gap-6 justify-center"
           >
             <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">GET IN TOUCH</span>
             <AnimatedTitle
@@ -53,7 +53,7 @@ export default function ContactPage() {
               ]}
               className="font-display font-black text-3xl sm:text-4xl text-paper leading-[1.1]"
             />
-            <p className="text-grey-dark text-xs sm:text-sm leading-relaxed">
+            <p className="text-grey-dark text-xs sm:text-sm leading-relaxed max-w-md">
               Have questions about pricing, security integrations, or custom training protocols? Drop us a line. We reply within one business day.
             </p>
 
@@ -84,7 +84,7 @@ export default function ContactPage() {
             </div>
 
             {/* Reassurance */}
-            <div className="bg-coral/5 border border-coral/10 rounded-[20px] p-5 text-xs text-grey-dark leading-relaxed backdrop-blur-md">
+            <div className="bg-coral/5 border border-coral/10 rounded-[20px] p-5 text-xs text-grey-dark leading-relaxed backdrop-blur-md max-w-md">
               &ldquo;We reply within one business day (usually much faster—you can also ask our AI chatbot demo on the home page).&rdquo;
             </div>
           </motion.div>
@@ -94,8 +94,9 @@ export default function ContactPage() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="lg:col-span-7 w-full border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl p-6 md:p-8 shadow-2xl hover:border-coral/25 transition-colors duration-500"
+            className="lg:col-span-7 w-full p-8 lg:p-16 flex flex-col justify-center bg-white/[0.005]"
           >
+            <div className="w-full border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl p-6 md:p-8 shadow-2xl hover:border-coral/25 transition-colors duration-500">
             {submitted ? (
               <div className="text-center py-12 flex flex-col items-center gap-5">
                 <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-2">
@@ -195,6 +196,7 @@ export default function ContactPage() {
                 </button>
               </form>
             )}
+            </div>
           </motion.div>
         </div>
       </main>

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, HelpCircle, Sparkles } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionTemplate, useMotionValueEvent } from "framer-motion";
+import AnimatedTitle from "@/components/AnimatedTitle";
 
 export default function HomeVision() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -14,28 +15,17 @@ export default function HomeVision() {
     offset: ["start end", "end start"]
   });
 
-  // Map scroll progress to crop insets:
-  // Starts cropped and expands.
-  const rightInset = useTransform(scrollYProgress, [0.15, 0.65], ["45%", "0%"]);
-  const bottomInset = useTransform(scrollYProgress, [0.15, 0.65], ["40%", "0%"]);
-
-  // Clip path template
-  const clipPath = useMotionTemplate`inset(1.25rem ${rightInset} ${bottomInset} 1.25rem)`;
-
   // Map to position percentages for the moving crosshair lines
-  // If rightInset is 45%, the line is at 100% - 45% = 55% from the left.
-  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [55, 100]);
-  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [60, 100]);
+  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [45.7, 81.5]);
+  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [53.5, 83.7]);
 
   const leftPos = useMotionTemplate`${xPercent}%`;
   const topPos = useMotionTemplate`${yPercent}%`;
 
   // Numeric coordinates to show in the UI
-  const xVal = useTransform(scrollYProgress, [0.15, 0.65], [457, 960]);
-  const yVal = useTransform(scrollYProgress, [0.15, 0.65], [535, 960]);
+  const xVal = useTransform(scrollYProgress, [0.15, 0.65], [457, 815]);
+  const yVal = useTransform(scrollYProgress, [0.15, 0.65], [535, 837]);
 
-  // Image zoom scale
-  const imgScale = useTransform(scrollYProgress, [0.15, 0.65], [1.3, 1.05]);
 
   // DOM refs to update coordinate numbers directly on scroll for peak performance
   const xTextRef = useRef<HTMLDivElement>(null);
@@ -56,35 +46,35 @@ export default function HomeVision() {
   return (
     <section 
       ref={sectionRef}
-      className="border-b border-white/10 bg-ink relative overflow-hidden w-full"
+      className="border-b border-white/10 bg-ink relative overflow-hidden w-full lg:min-h-screen lg:flex lg:flex-col lg:justify-center"
     >
       {/* Background radial glow */}
       <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-coral/5 rounded-full blur-[80px] pointer-events-none" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10 lg:min-h-screen items-stretch">
         {/* Left Column: Scroll-Driven Crosshair Image Reveal */}
         <div className="lg:col-span-5 lg:border-r border-white/10 flex items-center justify-center p-8 lg:p-16">
           <div className="relative w-full max-w-[480px] aspect-square border border-white/[0.05] rounded-[32px] bg-white/[0.02] backdrop-blur-2xl overflow-hidden shadow-2xl transition-colors duration-500 hover:border-coral/20">
             
             {/* Base Background Image (Grey / Blueprint outline placeholder) */}
-            <div className="absolute inset-5 border border-dashed border-white/10 rounded-[20px] bg-white/[0.005] flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-5 border border-dashed border-white/10 rounded-[20px] bg-white/[0.005] flex items-center justify-center overflow-hidden z-20 pointer-events-none">
               <span className="font-mono text-[9px] text-grey-dark tracking-widest uppercase opacity-40">
                 INITIALIZING SCANNER...
               </span>
             </div>
 
-            {/* Dynamic Clipped Image */}
-            <motion.div 
-              style={{ clipPath }}
-              className="absolute inset-0 z-10 overflow-hidden"
-            >
-              <motion.img 
-                src="/scanner.jpg"
-                alt="System Blueprint Scan"
-                style={{ scale: imgScale }}
+            {/* Video on Whole Block */}
+            <div className="absolute inset-0 z-10 overflow-hidden">
+              <video 
+                src="https://cdn.sanity.io/files/unkmsg3i/production/cde12660b1d9c1e245bb80b5ab01c77e4793569a.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
                 className="w-full h-full object-cover rounded-[32px] pointer-events-none"
               />
-            </motion.div>
+            </div>
 
             {/* Crosshair Overlay (relative to container) */}
             <div className="absolute inset-0 pointer-events-none z-20">
@@ -104,29 +94,35 @@ export default function HomeVision() {
                 className="absolute left-0 right-0 h-[1px] bg-coral/50"
               />
 
-              {/* Intersection Node & Text coordinates */}
+              {/* Intersection Node (Moving red dot) */}
               <motion.div 
                 style={{ left: leftPos, top: topPos }}
-                className="absolute"
+                className="absolute z-30"
               >
-                {/* Coordinates displays */}
-                <div 
-                  ref={xTextRef}
-                  className="absolute left-4 top-2 font-mono text-[9px] font-semibold text-coral uppercase tracking-widest bg-ink/75 px-1.5 py-0.5 rounded border border-coral/20"
-                >
-                  X: 457
-                </div>
-                <div 
-                  ref={yTextRef}
-                  className="absolute left-4 top-6 font-mono text-[9px] font-semibold text-coral uppercase tracking-widest bg-ink/75 px-1.5 py-0.5 rounded border border-coral/20"
-                >
-                  Y: 535
-                </div>
-                
-                {/* Cross Point Indicator */}
-                <div className="absolute w-2 h-2 bg-coral rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-coral/50" />
+                <div className="absolute w-2.5 h-2.5 bg-coral rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-coral/50 animate-pulse" />
               </motion.div>
             </div>
+
+            {/* Coordinate Target Box (Static at bottom-right) */}
+            <div 
+              className="absolute border-l border-t border-white/10 bg-ink/75 backdrop-blur-md flex flex-col justify-center p-4 font-mono text-[9px] text-coral select-none z-20"
+              style={{
+                left: "81.5%",
+                top: "83.7%",
+                right: "1.25rem",
+                bottom: "1.25rem"
+              }}
+            >
+              <div className="opacity-60 uppercase tracking-widest font-bold text-[8px]">X :</div>
+              <div ref={xTextRef} className="text-sm font-black text-coral leading-none mt-0.5 mb-2">
+                815
+              </div>
+              <div className="opacity-60 uppercase tracking-widest font-bold text-[8px]">Y :</div>
+              <div ref={yTextRef} className="text-sm font-black text-coral leading-none mt-0.5">
+                837
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -136,9 +132,17 @@ export default function HomeVision() {
             <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">
               ACQUISITION CONTROL
             </span>
-            <h2 className="font-display font-black text-3xl md:text-5xl text-paper tracking-tight leading-[1.05]">
-              Speed-to-lead control to execute with certainty
-            </h2>
+            <AnimatedTitle
+              as="h2"
+              scroll
+              variant="wipe"
+              lines={[
+                "Industrialized speed-to-lead",
+                "and digital control to execute",
+                "with certainty",
+              ]}
+              className="font-display font-black text-3xl md:text-5xl text-paper tracking-tight leading-[1.05]"
+            />
             <p className="text-grey-dark text-sm leading-relaxed max-w-lg">
               We govern, automate, and monitor the lead capture stage of local service clinics, bringing digital precision where manual receptionist follow-ups leak revenue.
             </p>

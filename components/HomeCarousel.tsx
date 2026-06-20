@@ -60,8 +60,8 @@ export default function HomeCarousel() {
       {/* Background radial glow */}
       <div className="absolute top-1/2 left-10 w-[300px] h-[300px] bg-violet/5 rounded-full blur-[80px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative z-10">
-        <div className="space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10 border-b border-white/[0.05] mb-16">
+        <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-center space-y-3">
           <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">
             METRIC PROOF
           </span>
@@ -71,21 +71,26 @@ export default function HomeCarousel() {
         </div>
         
         {/* Slider Controls */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => scroll("left")}
-            className="p-3.5 border border-white/[0.08] bg-white/[0.02] rounded-full text-paper hover:border-coral hover:text-coral transition-colors duration-300 backdrop-blur-md cursor-pointer"
-            title="Previous Case"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="p-3.5 border border-white/[0.08] bg-white/[0.02] rounded-full text-paper hover:border-coral hover:text-coral transition-colors duration-300 backdrop-blur-md cursor-pointer"
-            title="Next Case"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        <div className="lg:col-span-7 p-8 lg:p-16 flex items-center justify-between">
+          <span className="font-mono text-[9px] text-grey-dark uppercase tracking-widest opacity-70">
+            Browse our case studies
+          </span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => scroll("left")}
+              className="p-3.5 border border-white/[0.08] bg-white/[0.02] rounded-full text-paper hover:border-coral hover:text-coral transition-colors duration-300 backdrop-blur-md cursor-pointer"
+              title="Previous Case"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="p-3.5 border border-white/[0.08] bg-white/[0.02] rounded-full text-paper hover:border-coral hover:text-coral transition-colors duration-300 backdrop-blur-md cursor-pointer"
+              title="Next Case"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
