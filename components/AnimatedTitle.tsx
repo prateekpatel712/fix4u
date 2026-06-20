@@ -12,8 +12,8 @@ interface AnimatedTitleProps {
   as?: "div" | "h1" | "h2" | "h3";
   /**
    * "slide" (default): each line rises up into view, staggered.
-   * "wipe": a solid block covers each line and scales away to the right,
-   * uncovering the text left-to-right, with the lines cascading top→bottom.
+   * "wipe": a solid block sweeps in to cover each line; once all lines are
+   * covered, the blocks sweep back out to uncover the text, cascading top→bottom.
    */
   variant?: "slide" | "wipe";
 }
@@ -32,9 +32,10 @@ export default function AnimatedTitle({
     show: {
       opacity: 1,
       transition: {
-        // Both variants cascade top-to-bottom: line 1, then 2, then 3.
-        staggerChildren: variant === "wipe" ? 0.5 : 0.15,
-        delayChildren: 0.1,
+        // The slide variant staggers here; the wipe variant times every line
+        // itself (via `custom`), so it must NOT add a stagger on top.
+        staggerChildren: variant === "wipe" ? 0 : 0.15,
+        delayChildren: variant === "wipe" ? 0 : 0.1,
       },
     },
   };
@@ -45,13 +46,46 @@ export default function AnimatedTitle({
     show: { y: 0, rotate: 0, transition: { duration: 0.9, ease } },
   };
 
-  // --- wipe variant ---
-  // The line is covered by a block the colour of the text; it scales away to the
-  // right (origin-right, scaleX 1 → 0) so the text is uncovered left-to-right.
-  const WIPE_DURATION = 2.4;
+  // --- wipe variant timeline (seconds) ---
+  // Phase 1: each block sweeps in from the left to cover its line (quick, slight
+  // cascade). Phase 2: after every block has arrived + a short hold, the blocks
+  // sweep out to the right, uncovering the text top→bottom.
+  const ARRIVE_DUR = 0.6;
+  const ARRIVE_STAGGER = 0.15;
+  const HOLD = 0.3;
+  const REVEAL_DUR = 1.2;
+  const REVEAL_STAGGER = 0.4;
+  const lastArrived = (lines.length - 1) * ARRIVE_STAGGER + ARRIVE_DUR;
+  const revealBase = lastArrived + HOLD;
+
   const mask = {
-    hidden: { scaleX: 1 },
-    show: { scaleX: 0, transition: { duration: WIPE_DURATION, ease: "easeInOut" as const } },
+    hidden: { x: "-101%" },
+    show: (i: number) => {
+      const t0 = i * ARRIVE_STAGGER; // start sweeping in
+      const t1 = t0 + ARRIVE_DUR; // fully covering
+      const t2 = revealBase + i * REVEAL_STAGGER; // start sweeping out
+      const t3 = t2 + REVEAL_DUR; // gone (fully revealed)
+      const dur = t3 - t0;
+      return {
+        x: ["-101%", "0%", "0%", "101%"],
+        transition: {
+          delay: t0,
+          duration: dur,
+          times: [0, (t1 - t0) / dur, (t2 - t0) / dur, 1],
+          ease: "easeInOut" as const,
+        },
+      };
+    },
+  };
+
+  // Text stays invisible until its block is covering it, so it never flashes
+  // before the blocks arrive. It flips on under the cover, then is revealed.
+  const textReveal = {
+    hidden: { opacity: 0 },
+    show: (i: number) => ({
+      opacity: 1,
+      transition: { delay: i * ARRIVE_STAGGER + ARRIVE_DUR * 0.5, duration: 0.001 },
+    }),
   };
 
   const MotionTag = motion[as] as typeof motion.div;
@@ -78,11 +112,14 @@ export default function AnimatedTitle({
         >
           {variant === "wipe" ? (
             <>
-              <span className="block">{line}</span>
+              <motion.span variants={textReveal} custom={idx} className="block">
+                {line}
+              </motion.span>
               <motion.span
                 variants={mask}
+                custom={idx}
                 aria-hidden
-                className="pointer-events-none absolute inset-0 origin-right bg-paper"
+                className="pointer-events-none absolute inset-0 bg-paper"
               />
             </>
           ) : (
