@@ -16,6 +16,8 @@ interface AnimatedTitleProps {
    * covered, the blocks sweep back out to uncover the text, cascading top→bottom.
    */
   variant?: "slide" | "wipe";
+  /** Tailwind bg-* class for the wipe block — match the text colour. Default "bg-paper". */
+  wipeColor?: string;
 }
 
 export default function AnimatedTitle({
@@ -24,6 +26,7 @@ export default function AnimatedTitle({
   scroll = false,
   as = "div",
   variant = "slide",
+  wipeColor = "bg-paper",
 }: AnimatedTitleProps) {
   const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -119,7 +122,7 @@ export default function AnimatedTitle({
                 variants={mask}
                 custom={idx}
                 aria-hidden
-                className="pointer-events-none absolute inset-0 bg-paper"
+                className={`pointer-events-none absolute inset-0 ${wipeColor}`}
               />
             </>
           ) : (
