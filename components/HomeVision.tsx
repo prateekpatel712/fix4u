@@ -96,11 +96,8 @@ export default function HomeVision() {
         </div>
 
         {/* Right Column: Text Information */}
-        <div className="lg:col-span-7 flex flex-col justify-center p-8 lg:p-16 gap-12">
-          <div className="space-y-5">
-            <span className="font-mono text-xs text-ink/45 tracking-widest uppercase font-semibold">
-              ACQUISITION CONTROL
-            </span>
+        <div className="lg:col-span-7 flex flex-col p-8 lg:p-16 gap-12">
+          <div className="space-y-6">
             <AnimatedTitle
               as="h2"
               scroll
@@ -111,61 +108,85 @@ export default function HomeVision() {
                 "and digital control to execute",
                 "with certainty",
               ]}
-              className="font-display font-black text-3xl md:text-5xl text-ink tracking-tight leading-[1.05]"
+              className="font-display font-black text-[clamp(2.25rem,4.6vw,4.3333rem)] text-ink tracking-tight leading-[1.04]"
             />
-            <p className="text-ink/60 text-sm leading-relaxed max-w-lg">
+            <p className="text-ink/60 text-base md:text-lg leading-relaxed max-w-xl">
               We govern, automate, and monitor the lead capture stage of local service clinics, bringing digital precision where manual receptionist follow-ups leak revenue.
             </p>
           </div>
 
-          {/* Sub Blocks */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-ink/10">
+          {/* Sub Blocks — fill remaining height: label pinned top, body + CTA pinned bottom */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-ink/10 lg:flex-1">
             {/* Block 1 — APPROACH */}
-            <div className="flex flex-col pt-8 sm:pr-10 sm:border-r border-ink/10">
+            <div className="flex flex-col justify-between gap-12 pt-8 sm:pr-12 sm:border-r border-ink/10">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold uppercase tracking-widest text-ink">
+                <span className="font-display text-xl font-bold uppercase tracking-tight text-ink">
                   Approach
                 </span>
-                <span className="w-2 h-2 bg-ink" />
+                <span className="w-2.5 h-2.5 bg-ink" />
               </div>
-              <p className="text-ink/65 text-sm leading-relaxed mt-10">
-                A custom codebase that links WhatsApp business channels with calendar system databases and CRM logs, ensuring 10-second response latency.
-              </p>
-              <Link
-                href="/ai-booking-agent"
-                className="group mt-8 inline-flex items-stretch self-start border border-ink/25 hover:border-ink transition-colors"
-              >
-                <span className="px-5 py-3 text-[10px] font-bold uppercase tracking-widest font-mono">
-                  Learn more
-                </span>
-                <span className="flex items-center px-3 border-l border-ink/25 group-hover:border-ink transition-colors">
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </span>
-              </Link>
+              <div className="space-y-8">
+                <p className="text-ink/75 text-base md:text-lg leading-relaxed">
+                  A custom codebase that links WhatsApp business channels with calendar system databases and CRM logs, ensuring 10-second response latency.
+                </p>
+                <Link
+                  href="/ai-booking-agent"
+                  className="learn__trigger flex items-stretch w-full border border-ink/25 overflow-hidden select-none"
+                >
+                  <span className="flex-1 flex items-center px-6 py-4 text-sm font-bold tracking-wide">
+                    <span className="button__text">
+                      <span className="button__text--sp button__text--sp--1">Learn more</span>
+                      <span className="button__text--sp button__text--sp--2">Learn more</span>
+                    </span>
+                  </span>
+                  <span className="learn__icon flex items-center justify-center px-5 border-l border-ink/25">
+                    <span className="button__icon">
+                      <span className="button__icon__inner button__icon__inner--1">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                      <span className="button__icon__inner button__icon__inner--2">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </span>
+                  </span>
+                </Link>
+              </div>
             </div>
 
             {/* Block 2 — COMPANY */}
-            <div className="flex flex-col pt-8 sm:pl-10 max-sm:mt-8 max-sm:border-t max-sm:border-ink/10">
+            <div className="flex flex-col justify-between gap-12 pt-8 sm:pl-12 max-sm:mt-10 max-sm:border-t max-sm:border-ink/10">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold uppercase tracking-widest text-ink">
+                <span className="font-display text-xl font-bold uppercase tracking-tight text-ink">
                   Company
                 </span>
-                <span className="w-2 h-2 bg-ink" />
+                <span className="w-2.5 h-2.5 bg-ink" />
               </div>
-              <p className="text-ink/65 text-sm leading-relaxed mt-10">
-                We manage the cloud infrastructure, monitor conversation models, and modify scripts directly to adapt to your seasonal clinic adjustments.
-              </p>
-              <Link
-                href="/about"
-                className="group mt-8 inline-flex items-stretch self-start border border-ink/25 hover:border-ink transition-colors"
-              >
-                <span className="px-5 py-3 text-[10px] font-bold uppercase tracking-widest font-mono">
-                  Learn more
-                </span>
-                <span className="flex items-center px-3 border-l border-ink/25 group-hover:border-ink transition-colors">
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </span>
-              </Link>
+              <div className="space-y-8">
+                <p className="text-ink/75 text-base md:text-lg leading-relaxed">
+                  We manage the cloud infrastructure, monitor conversation models, and modify scripts directly to adapt to your seasonal clinic adjustments.
+                </p>
+                <Link
+                  href="/about"
+                  className="learn__trigger flex items-stretch w-full border border-ink/25 overflow-hidden select-none"
+                >
+                  <span className="flex-1 flex items-center px-6 py-4 text-sm font-bold tracking-wide">
+                    <span className="button__text">
+                      <span className="button__text--sp button__text--sp--1">Learn more</span>
+                      <span className="button__text--sp button__text--sp--2">Learn more</span>
+                    </span>
+                  </span>
+                  <span className="learn__icon flex items-center justify-center px-5 border-l border-ink/25">
+                    <span className="button__icon">
+                      <span className="button__icon__inner button__icon__inner--1">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                      <span className="button__icon__inner button__icon__inner--2">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </span>
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

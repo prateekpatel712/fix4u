@@ -16,6 +16,10 @@ export default function RoiCalculator() {
   const revenueRecovered = recoveredLeads * value;
   const annualRecovered = revenueRecovered * 12;
 
+  const formatNumber = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <div 
       className="w-full max-w-4xl mx-auto border border-white/[0.05] rounded-[32px] bg-white/[0.01] backdrop-blur-2xl shadow-2xl overflow-hidden font-sans p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 relative z-10"
@@ -112,7 +116,7 @@ export default function RoiCalculator() {
                 Current Revenue Leak
               </span>
               <div className="text-2xl font-display font-black text-red-400 mt-1">
-                ${revenueLost.toLocaleString()}/mo
+                ${formatNumber(revenueLost)}/mo
               </div>
               <p className="text-[11px] text-grey-dark mt-1 leading-relaxed">
                 Estimated loss of <span className="text-red-400 font-semibold">{leadsLost} leads</span>/month to delays.
@@ -128,7 +132,7 @@ export default function RoiCalculator() {
                 Projected Recovery
               </span>
               <div className="text-3xl font-display font-black text-emerald mt-1">
-                +${revenueRecovered.toLocaleString()}/mo
+                +${formatNumber(revenueRecovered)}/mo
               </div>
               <p className="text-[11px] text-grey-dark mt-1 leading-relaxed">
                 By answering in seconds, AI recovers <span className="text-emerald font-semibold">{recoveredLeads} leads</span> that would have clicked next.
@@ -143,7 +147,7 @@ export default function RoiCalculator() {
               <span className="text-grey font-semibold uppercase tracking-wider">Annual savings</span>
             </div>
             <span className="font-display font-black text-xl text-paper">
-              ${annualRecovered.toLocaleString()}/yr
+              ${formatNumber(annualRecovered)}/yr
             </span>
           </div>
         </div>

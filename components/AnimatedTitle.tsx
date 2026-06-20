@@ -55,9 +55,9 @@ export default function AnimatedTitle({
   // sweep out to the right, uncovering the text top→bottom.
   const ARRIVE_DUR = 0.6;
   const ARRIVE_STAGGER = 0.15;
-  const HOLD = 0.3;
-  const REVEAL_DUR = 1.2;
-  const REVEAL_STAGGER = 0.4;
+  const HOLD = 0.2;
+  const REVEAL_DUR = 0.65;
+  const REVEAL_STAGGER = 0.2;
   const lastArrived = (lines.length - 1) * ARRIVE_STAGGER + ARRIVE_DUR;
   const revealBase = lastArrived + HOLD;
 
