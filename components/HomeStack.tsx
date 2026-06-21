@@ -1,100 +1,110 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, Bot, Laptop, Search } from "lucide-react";
+import { ArrowRight, Bot, Laptop, Search } from "lucide-react";
+
+// Height (px) of the collapsed pinned strip — number + label + image sliver.
+const HEADER = 72;
+// Offset (px) below the fixed site header where the strips start stacking.
+const BASE = 84;
 
 export default function HomeStack() {
   const stackItems = [
     {
       num: "01",
-      title: "AI Booking Agent",
       subtitle: "Primary Funnel Receptionist",
+      title: "AI Booking Agent",
       desc: "Custom-trained chatbot receptionists operating on WhatsApp, Instagram DMs, and Web Chat. They reply instantly, answer treatment FAQs, filter out tyre-kickers, and book slots directly in your calendar.",
-      icon: <Bot className="w-8 h-8 text-coral" />,
+      icon: <Bot className="w-10 h-10 text-ink/80" />,
       link: "/ai-booking-agent",
-      bgColor: "bg-[#070709]/80 backdrop-blur-2xl border-white/[0.05] hover:border-coral/20",
-      glowColor: "rgba(255, 86, 64, 0.05)"
     },
     {
       num: "02",
-      title: "Conversion Website",
       subtitle: "Speed-tuned Lead Capture",
+      title: "Conversion Website",
       desc: "Super-fast, custom-coded landing pages designed to capture local search and ad traffic. Optimized to run at 100/100 Lighthouse performance scores and direct leads immediately into the chat receptionist.",
-      icon: <Laptop className="w-8 h-8 text-violet" />,
+      icon: <Laptop className="w-10 h-10 text-ink/80" />,
       link: "/book",
-      bgColor: "bg-[#070709]/80 backdrop-blur-2xl border-white/[0.05] hover:border-violet/20",
-      glowColor: "rgba(139, 92, 246, 0.05)"
     },
     {
       num: "03",
-      title: "Targeted Acquisition",
       subtitle: "High-Intent Pipeline Fuel",
+      title: "Targeted Acquisition",
       desc: "Local search SEO configurations and paid ad setups (Instagram/Facebook/Google Ads) tuned to generate qualified leads that feed directly into your WhatsApp and web chatbot funnels.",
-      icon: <Search className="w-8 h-8 text-coral" />,
+      icon: <Search className="w-10 h-10 text-ink/80" />,
       link: "/book",
-      bgColor: "bg-[#070709]/80 backdrop-blur-2xl border-white/[0.05] hover:border-coral/20",
-      glowColor: "rgba(255, 86, 64, 0.05)"
-    }
+    },
   ];
 
   return (
-    <section className="border-b border-white/10 bg-ink relative w-full">
-      {/* Background glowing particles */}
-      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-coral/5 rounded-full blur-[110px] pointer-events-none" />
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10">
-        {/* Left Column: Heading */}
-        <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-start space-y-3">
-          <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">
-            ACQUISITION PILLARS
+    <section className="bg-paper text-ink border-y border-ink/10 w-full">
+      {/* Heading band — scrolls away normally */}
+      <div className="grid grid-cols-1 lg:grid-cols-12">
+        <div className="lg:col-span-7 lg:border-r border-ink/10 p-8 lg:p-16 space-y-4">
+          <span className="font-mono text-xs text-ink/50 tracking-widest uppercase font-semibold">
+            Acquisition Pillars
           </span>
-          <h2 className="font-display font-black text-3xl md:text-5xl text-paper tracking-tight leading-[1.05]">
+          <h2 className="font-display font-medium text-[clamp(2rem,4vw,3.5rem)] text-ink tracking-tight leading-[1.05] max-w-xl">
             Integrated funnel technology for local service clinics
           </h2>
         </div>
+        <div className="hidden lg:block lg:col-span-5" />
+      </div>
 
-        {/* Right Column: Stacking Cards Container */}
-        <div className="lg:col-span-7 p-8 lg:p-16 flex flex-col gap-12">
-          {stackItems.map((item, idx) => (
-            <div
-              key={idx}
-              className={`sticky top-28 w-full border rounded-[32px] p-8 md:p-12 shadow-2xl flex flex-col md:flex-row gap-8 md:gap-16 items-start justify-between min-h-[300px] transition-all duration-500 hover:scale-[1.01] ${item.bgColor}`}
-              style={{ 
-                boxShadow: `0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 0 30px ${item.glowColor}`
-              }}
-            >
-              {/* Left part: Order & Title */}
-              <div className="flex flex-col gap-6 md:max-w-md">
-                <div className="flex items-center gap-4 text-xs font-mono tracking-widest">
-                  <span className="text-coral font-bold text-base">{item.num}</span>
-                  <span className="text-grey-dark uppercase font-semibold opacity-70">/ {item.subtitle}</span>
-                </div>
-                
-                <div className="space-y-4">
-                  <h3 className="font-display font-black text-2xl sm:text-3xl text-paper tracking-tight uppercase">
-                    {item.title}
-                  </h3>
-                  <p className="text-grey-dark text-xs sm:text-sm leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-
-                <Link
-                  href={item.link}
-                  className="inline-flex items-center justify-center gap-2 bg-coral text-ink font-sans text-xs font-bold uppercase tracking-wider py-4 px-6 rounded-xl overflow-hidden group transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <span>Learn more</span>
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
+      {/* Sticky stacking list */}
+      <div>
+        {stackItems.map((item, idx) => (
+          <article
+            key={item.num}
+            className="md:sticky bg-paper border-t border-ink/10"
+            style={{ top: `${BASE + idx * HEADER}px` }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-12 items-stretch lg:min-h-[78vh]">
+              {/* Number */}
+              <div className="md:col-span-2 lg:col-span-1 md:border-r border-ink/10 px-6 pt-6 pb-3 md:pb-6">
+                <span className="font-mono text-sm text-ink/80">
+                  {item.num} <span className="text-ink/30">/</span>
+                </span>
               </div>
 
-              {/* Right part: Icon representation */}
-              <div className="w-24 h-24 rounded-2xl bg-white/[0.01] border border-white/[0.05] flex items-center justify-center shrink-0 self-center md:self-auto shadow-inner">
+              {/* Visual panel */}
+              <div className="md:col-span-4 md:border-r border-ink/10 relative bg-ink/[0.03] min-h-[220px] flex items-center justify-center overflow-hidden">
                 {item.icon}
               </div>
+
+              {/* Text */}
+              <div className="md:col-span-6 lg:col-span-7 px-6 pt-6 pb-10 md:px-10 lg:px-14 flex flex-col">
+                <h3 className="font-display font-medium text-[clamp(1.6rem,2.6vw,2.4rem)] text-ink tracking-tight leading-[1.1] mt-14 max-w-md">
+                  {item.title}
+                </h3>
+                <p className="text-ink/65 text-base leading-relaxed mt-6 max-w-md">
+                  {item.desc}
+                </p>
+                <Link
+                  href={item.link}
+                  className="learn__trigger flex items-stretch w-fit border border-ink/25 overflow-hidden select-none mt-10"
+                >
+                  <span className="flex-1 flex items-center px-6 py-4 text-sm font-bold tracking-wide">
+                    <span className="button__text">
+                      <span className="button__text--sp button__text--sp--1">Learn more</span>
+                      <span className="button__text--sp button__text--sp--2">Learn more</span>
+                    </span>
+                  </span>
+                  <span className="learn__icon flex items-center justify-center px-5 border-l border-ink/25">
+                    <span className="button__icon">
+                      <span className="button__icon__inner button__icon__inner--1">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                      <span className="button__icon__inner button__icon__inner--2">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </span>
+                  </span>
+                </Link>
+              </div>
             </div>
-          ))}
-        </div>
+          </article>
+        ))}
       </div>
     </section>
   );

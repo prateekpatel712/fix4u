@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import ScrollProvider from "@/components/ScrollProvider";
 import "./globals.css";
@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     title: "Fix4U — custom AI WhatsApp & Instagram booking agents",
     description: "Next-Gen Front Desk. Custom AI agents that qualify and book appointments 24/7.",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#070709",
 };
 
 export default function RootLayout({

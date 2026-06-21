@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Bot, ChevronDown } from "lucide-react";
-import Header from "@/components/Header";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
+import HomeNav from "@/components/HomeNav";
 import Hero from "@/components/Hero";
 import HeroVideo from "@/components/HeroVideo";
 import HomeVision from "@/components/HomeVision";
@@ -11,7 +11,10 @@ import HomeSchema from "@/components/HomeSchema";
 import HomeStack from "@/components/HomeStack";
 import ChatDemo from "@/components/ChatDemo";
 import RoiCalculator from "@/components/RoiCalculator";
-import HomeCarousel from "@/components/HomeCarousel";
+import HomeValue from "@/components/HomeValue";
+import HomeSystem from "@/components/HomeSystem";
+import HomeBacking from "@/components/HomeBacking";
+import HomeCta from "@/components/HomeCta";
 import BookingEmbed from "@/components/BookingEmbed";
 import Footer from "@/components/Footer";
 
@@ -49,15 +52,13 @@ export default function Home() {
     }
   ];
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
     <div className="flex flex-col min-h-screen bg-ink">
-      <Header isOpen={menuOpen} setIsOpen={setMenuOpen} />
-      
+      <HomeNav />
+
       <main className="flex-grow">
         {/* Hero Section */}
-        <Hero isOpen={menuOpen} setIsOpen={setMenuOpen} />
+        <Hero />
 
         {/* Video Banner Section */}
         <HeroVideo />
@@ -118,8 +119,14 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Case Studies Carousel */}
-        <HomeCarousel />
+        {/* Value Accordion (light) */}
+        <HomeValue />
+
+        {/* System Control (light, crosshair) */}
+        <HomeSystem />
+
+        {/* Backing / Guarantee (light) */}
+        <HomeBacking />
 
         {/* FAQs */}
         <section className="border-b border-white/10 bg-ink relative w-full font-sans">
@@ -182,6 +189,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Bold closing CTA */}
+        <HomeCta />
       </main>
 
       <Footer />

@@ -88,11 +88,13 @@ export default function HomeVision() {
             </motion.div>
           </div>
 
-          {/* Coordinate Readout (bottom-right) */}
-          <div className="absolute right-5 bottom-5 flex flex-col items-end gap-1 font-mono text-[11px] font-semibold text-ink/80 select-none">
-            <div ref={xTextRef}>X: 457</div>
-            <div ref={yTextRef}>Y: 535</div>
-          </div>
+          {/* Coordinate Readout — travels with the crosshair point */}
+          <motion.div style={{ left: leftPos, top: topPos }} className="absolute z-40 pointer-events-none">
+            <div className="translate-x-3 translate-y-2.5 font-mono text-[11px] font-semibold text-ink/80 select-none whitespace-nowrap">
+              <div ref={xTextRef}>X: 457</div>
+              <div ref={yTextRef}>Y: 535</div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Right Column: Text Information */}
@@ -108,7 +110,7 @@ export default function HomeVision() {
                 "and digital control to execute",
                 "with certainty",
               ]}
-              className="font-display font-black text-[clamp(2.25rem,4.6vw,4.3333rem)] text-ink tracking-tight leading-[1.04]"
+              className="font-display font-black text-[clamp(1.6rem,4.6vw,4.3333rem)] text-ink tracking-tight leading-[1.04]"
             />
             <p className="text-ink/60 text-base md:text-lg leading-relaxed max-w-xl">
               We govern, automate, and monitor the lead capture stage of local service clinics, bringing digital precision where manual receptionist follow-ups leak revenue.
