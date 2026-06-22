@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | Fix4U",
   },
   description: "Fix4U builds custom AI agents that answer and book your leads 24/7 on WhatsApp, Instagram & web. Built and hosted for you. Book a free call.",
-  metadataBase: new URL("https://fix4u.in"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://fix4u.in"),
   openGraph: {
     title: "Fix4U — custom AI WhatsApp & Instagram booking agents",
     description: "Next-Gen Front Desk. Custom AI agents that qualify and book appointments 24/7.",
