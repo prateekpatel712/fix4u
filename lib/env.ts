@@ -45,5 +45,8 @@ export const publicEnv = {
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
 } as const;
 
-/** The AI model powering the chatbot (Tech Spec §2 / chat engine). Defaults to the latest Opus. */
-export const chatModel = process.env.CHAT_MODEL || "claude-opus-4-8";
+/** The Gemini model powering the chatbot (chat engine). Defaults to Gemini 2.5 Flash. */
+export const chatModel = process.env.CHAT_MODEL || "gemini-2.5-flash";
+
+/** Max number of visitor (user) messages allowed in one chat session before we nudge to booking. */
+export const MAX_CHAT_USER_MESSAGES = 10;

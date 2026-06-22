@@ -12,6 +12,9 @@ interface Message {
 
 const stamp = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
+/** Keep in sync with MAX_CHAT_USER_MESSAGES on the server (lib/env.ts). */
+const MAX_USER_MESSAGES = 10;
+
 const GREETING: Message = {
   sender: "bot",
   text: "Hi! I'm the AI assistant for Sunrise Med Spa. 🌸 How can I help you today?",
@@ -40,9 +43,12 @@ export default function ChatDemo() {
     if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
   }, [messages, isTyping]);
 
+  const userMessageCount = messages.filter((m) => m.sender === "user").length;
+  const limitReached = userMessageCount >= MAX_USER_MESSAGES;
+
   const send = async (raw: string) => {
     const text = raw.trim();
-    if (!text || isTyping) return;
+    if (!text || isTyping || limitReached) return;
 
     const history = [...messages, { sender: "user", text, timestamp: stamp() } as Message];
     setMessages(history);
@@ -242,30 +248,44 @@ export default function ChatDemo() {
         </div>
       )}
 
-      {/* Input */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          send(input);
-        }}
-        className="px-6 py-4 border-t border-white/[0.05] bg-white/[0.01] flex items-center gap-3"
-      >
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about services, pricing, or booking…"
-          disabled={isTyping}
-          className="flex-1 bg-ink/50 border border-white/[0.05] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-paper focus:outline-none focus:border-coral transition-colors disabled:opacity-60"
-        />
-        <button
-          type="submit"
-          disabled={isTyping || !input.trim()}
-          className="p-2.5 bg-coral text-ink rounded-xl transition-all hover:scale-[1.03] disabled:bg-white/[0.02] disabled:text-grey-dark disabled:scale-100 disabled:cursor-not-allowed cursor-pointer"
+      {/* Input — or the booking nudge once the demo limit is reached */}
+      {limitReached ? (
+        <div className="px-6 py-4 border-t border-white/[0.05] bg-white/[0.01] flex flex-col sm:flex-row sm:items-center gap-3">
+          <p className="text-[11px] text-grey leading-relaxed flex-1">
+            That&apos;s the end of the demo. Want this for your business? Book a free 15-minute call.
+          </p>
+          <a
+            href="#book"
+            className="shrink-0 inline-flex items-center justify-center gap-1.5 bg-coral text-ink font-bold text-[11px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:scale-[1.02] transition-transform"
+          >
+            Book a call <ArrowUpRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      ) : (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            send(input);
+          }}
+          className="px-6 py-4 border-t border-white/[0.05] bg-white/[0.01] flex items-center gap-3"
         >
-          <Send className="w-4 h-4" />
-        </button>
-      </form>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask about services, pricing, or booking…"
+            disabled={isTyping}
+            className="flex-1 bg-ink/50 border border-white/[0.05] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-paper focus:outline-none focus:border-coral transition-colors disabled:opacity-60"
+          />
+          <button
+            type="submit"
+            disabled={isTyping || !input.trim()}
+            className="p-2.5 bg-coral text-ink rounded-xl transition-all hover:scale-[1.03] disabled:bg-white/[0.02] disabled:text-grey-dark disabled:scale-100 disabled:cursor-not-allowed cursor-pointer"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </form>
+      )}
     </div>
   );
 }

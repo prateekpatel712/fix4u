@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Bot, Laptop, Search } from "lucide-react";
+import { ArrowRight, Bot, Check, Laptop, Search } from "lucide-react";
 
 // Height (px) of the collapsed pinned strip — number + label + image sliver.
 const HEADER = 72;
@@ -16,6 +16,12 @@ export default function HomeStack() {
       subtitle: "Primary Funnel Receptionist",
       title: "AI Booking Agent",
       desc: "Custom-trained chatbot receptionists operating on WhatsApp, Instagram DMs, and Web Chat. They reply instantly, answer treatment FAQs, filter out tyre-kickers, and book slots directly in your calendar.",
+      features: [
+        "Instant replies in under 30 seconds, 24/7",
+        "Trained on your exact services, pricing & FAQs",
+        "Qualifies leads and filters out time-wasters",
+        "Books confirmed slots straight into your calendar",
+      ],
       icon: <Bot className="w-10 h-10 text-ink/80" />,
       image: "/ai-booking-agent.jpg",
       link: "/ai-booking-agent",
@@ -25,6 +31,12 @@ export default function HomeStack() {
       subtitle: "Speed-tuned Lead Capture",
       title: "Conversion Website",
       desc: "Super-fast, custom-coded landing pages designed to capture local search and ad traffic. Optimized to run at 100/100 Lighthouse performance scores and direct leads immediately into the chat receptionist.",
+      features: [
+        "Custom-coded for 100/100 Lighthouse performance",
+        "Loads in under a second on every device",
+        "Engineered to rank for local ‘near me’ searches",
+        "Channels every visitor into the chat receptionist",
+      ],
       icon: <Laptop className="w-10 h-10 text-ink/80" />,
       image: "/conversion-website.jpg",
       link: "/book",
@@ -34,6 +46,12 @@ export default function HomeStack() {
       subtitle: "High-Intent Pipeline Fuel",
       title: "Targeted Acquisition",
       desc: "Local search SEO configurations and paid ad setups (Instagram/Facebook/Google Ads) tuned to generate qualified leads that feed directly into your WhatsApp and web chatbot funnels.",
+      features: [
+        "Local SEO that puts you on the map for nearby searches",
+        "Paid campaigns across Instagram, Facebook & Google",
+        "Tuned to attract high-intent, ready-to-book leads",
+        "Feeds qualified traffic straight into your funnels",
+      ],
       icon: <Search className="w-10 h-10 text-ink/80" />,
       image: "/targeted-acquisition-v3.jpg",
       link: "/book",
@@ -41,7 +59,7 @@ export default function HomeStack() {
   ];
 
   return (
-    <section className="bg-paper text-ink border-y border-ink/10 w-full">
+    <section id="how-it-works" className="scroll-mt-20 bg-paper text-ink border-y border-ink/10 w-full">
       {/* Heading band — scrolls away normally */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
         <div className="lg:col-span-7 lg:border-r border-ink/10 p-8 lg:p-16 space-y-4">
@@ -91,12 +109,31 @@ export default function HomeStack() {
                 <h3 className="font-display font-medium text-2xl md:text-3xl text-ink tracking-tight leading-[1.1]">
                   {item.title}
                 </h3>
-                <p className="text-ink/65 text-base leading-relaxed mt-10 max-w-md">
+                <p className="text-ink/70 text-lg md:text-xl leading-relaxed mt-8 max-w-none">
                   {item.desc}
                 </p>
+
+                {/* Benefit list — fills the card body and reinforces the pitch */}
+                <ul className="mt-10 border-t border-ink/10">
+                  {item.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-4 border-b border-ink/10 py-4 md:py-5"
+                    >
+                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-coral/15 shrink-0">
+                        <Check className="w-4 h-4 text-coral" />
+                      </span>
+                      <span className="text-ink/75 text-base md:text-lg leading-snug">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-auto pt-10">
                 <Link
                   href={item.link}
-                  className="learn__trigger flex items-stretch w-fit border border-ink/25 overflow-hidden select-none mt-10"
+                  className="learn__trigger flex items-stretch w-fit border border-ink/25 overflow-hidden select-none"
                 >
                   <span className="flex-1 flex items-center px-6 py-4 text-sm font-bold tracking-wide">
                     <span className="button__text">
@@ -115,6 +152,7 @@ export default function HomeStack() {
                     </span>
                   </span>
                 </Link>
+                </div>
               </div>
             </div>
           </article>

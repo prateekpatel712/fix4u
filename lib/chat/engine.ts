@@ -1,17 +1,16 @@
 /**
  * Fix4U chatbot engine (PRD §2.4 live bot + §2.5 sandboxed demo).
  *
- * Runs a streaming agentic loop against the Anthropic API: streams the model's text to the
- * caller token-by-token, and when the model calls a tool it executes the tool, feeds the result
- * back, and continues — until the model finishes. UI-action tools (book_call, handoff_whatsapp)
- * are surfaced to the frontend as `action` events; `capture_lead` writes to CRM + email.
+ * Runs a streaming agentic loop against the Google Gemini API: streams the model's text to the
+ * caller token-by-token, and when the model calls a function it executes the tool, feeds the
+ * result back, and continues — until the model finishes. UI-action tools (book_call,
+ * handoff_whatsapp) are surfaced to the frontend as `action` events; `capture_lead` writes to
+ * CRM + email.
  *
- * Model: `CHAT_MODEL` env (default claude-opus-4-8). Thinking is omitted for low chat latency;
- * effort is left at the model default so the engine stays valid if CHAT_MODEL is switched to
- * Haiku/Sonnet for cost. See the claude-api guidance.
+ * Model: `CHAT_MODEL` env (default gemini-2.5-flash). Thinking is disabled for low chat latency.
  */
 
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI, type Content, type FunctionCall, type Part } from "@google/genai";
 import { chatModel, optionalEnv } from "@/lib/env";
 import { createLogger } from "@/lib/logger";
 import { chatTools } from "@/lib/chat/tools";
@@ -46,74 +45,74 @@ export interface RunChatOptions {
 
 /** True when the chatbot can run (API key present). */
 export function chatConfigured(): boolean {
-  return Boolean(optionalEnv("ANTHROPIC_API_KEY"));
+  return Boolean(optionalEnv("GEMINI_API_KEY"));
 }
 
 export async function* runChat(opts: RunChatOptions): AsyncGenerator<ChatEvent> {
-  const apiKey = optionalEnv("ANTHROPIC_API_KEY");
+  const apiKey = optionalEnv("GEMINI_API_KEY");
   if (!apiKey) {
     yield { type: "error", message: "The assistant isn't configured yet. Please use the contact form or WhatsApp." };
     return;
   }
 
-  const client = new Anthropic({ apiKey });
+  const ai = new GoogleGenAI({ apiKey });
   const system = opts.demo
     ? buildDemoSystemPrompt()
     : buildLiveSystemPrompt(await getFaqs().catch(() => []));
 
-  const messages: Anthropic.MessageParam[] = opts.messages.map((m) => ({
-    role: m.role,
-    content: m.content,
+  // Gemini history uses roles "user" and "model".
+  const contents: Content[] = opts.messages.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
   }));
 
   try {
     for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
-      const stream = client.messages.stream({
+      const stream = await ai.models.generateContentStream({
         model: chatModel,
-        max_tokens: MAX_TOKENS,
-        system,
-        tools: chatTools,
-        messages,
+        contents,
+        config: {
+          systemInstruction: system,
+          tools: [{ functionDeclarations: chatTools }],
+          maxOutputTokens: MAX_TOKENS,
+          // Disable thinking on flash for snappy first-token latency.
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       });
 
-      // Stream assistant text to the caller as it arrives.
-      for await (const event of stream) {
-        if (
-          event.type === "content_block_delta" &&
-          event.delta.type === "text_delta" &&
-          event.delta.text
-        ) {
-          yield { type: "text", delta: event.delta.text };
+      // Stream assistant text to the caller as it arrives; collect any function calls.
+      let assistantText = "";
+      const calls: FunctionCall[] = [];
+      for await (const chunk of stream) {
+        const delta = chunk.text;
+        if (delta) {
+          assistantText += delta;
+          yield { type: "text", delta };
         }
+        const fns = chunk.functionCalls;
+        if (fns?.length) calls.push(...fns);
       }
 
-      const final = await stream.finalMessage();
+      // No function calls → the assistant is done.
+      if (!calls.length) break;
 
-      // No tool calls → the assistant is done.
-      if (final.stop_reason !== "tool_use") break;
+      // Record the model turn (its text + functionCall parts) before sending results back.
+      const modelParts: Part[] = [];
+      if (assistantText) modelParts.push({ text: assistantText });
+      for (const call of calls) modelParts.push({ functionCall: call });
+      contents.push({ role: "model", parts: modelParts });
 
-      // Record the assistant turn (with its tool_use blocks) before sending results.
-      // The SDK's response content blocks round-trip back as request params; the cast bridges
-      // the response/param type split (e.g. citation field shapes) without losing the blocks.
-      messages.push({
-        role: "assistant",
-        content: final.content as unknown as Anthropic.ContentBlockParam[],
-      });
-
-      const toolResults: Anthropic.ToolResultBlockParam[] = [];
-      for (const block of final.content) {
-        if (block.type !== "tool_use") continue;
-        const { result, events } = await executeTool(block, opts.demo ?? false);
+      const responseParts: Part[] = [];
+      for (const call of calls) {
+        const { result, events } = await executeTool(call, opts.demo ?? false);
         for (const ev of events) yield ev;
-        toolResults.push({
-          type: "tool_result",
-          tool_use_id: block.id,
-          content: result,
+        responseParts.push({
+          functionResponse: { name: call.name ?? "", response: { result } },
         });
       }
 
-      // Feed tool results back so the model can compose its follow-up reply.
-      messages.push({ role: "user", content: toolResults });
+      // Feed function results back so the model can compose its follow-up reply.
+      contents.push({ role: "user", parts: responseParts });
     }
 
     yield { type: "done" };
@@ -126,14 +125,36 @@ export async function* runChat(opts: RunChatOptions): AsyncGenerator<ChatEvent> 
   }
 }
 
-/** Execute one tool call. Returns the tool_result text for the model + any UI events to emit. */
+/**
+ * Collect a full (non-streaming) reply from the engine — used by the WhatsApp agent, which sends
+ * one complete message rather than a token stream. Returns the assistant text plus a booking URL
+ * if the model opened the scheduler (so the webhook can append the link to its reply).
+ */
+export async function runChatToReply(
+  opts: RunChatOptions,
+): Promise<{ text: string; bookingUrl?: string; error: boolean }> {
+  let text = "";
+  let bookingUrl: string | undefined;
+  let error = false;
+  for await (const ev of runChat(opts)) {
+    if (ev.type === "text") text += ev.delta;
+    else if (ev.type === "action" && ev.action === "book_call") bookingUrl = ev.url;
+    else if (ev.type === "error") {
+      error = true;
+      if (!text) text = ev.message;
+    }
+  }
+  return { text: text.trim(), bookingUrl, error };
+}
+
+/** Execute one function call. Returns the result text for the model + any UI events to emit. */
 async function executeTool(
-  block: Anthropic.ToolUseBlock,
+  call: FunctionCall,
   demo: boolean,
 ): Promise<{ result: string; events: ChatEvent[] }> {
-  const input = (block.input ?? {}) as Record<string, unknown>;
+  const input = (call.args ?? {}) as Record<string, unknown>;
 
-  switch (block.name) {
+  switch (call.name) {
     case "book_call": {
       const name = str(input.name);
       const email = str(input.email);
@@ -186,7 +207,7 @@ async function executeTool(
     }
 
     default:
-      return { result: `Unknown tool: ${block.name}`, events: [] };
+      return { result: `Unknown tool: ${call.name}`, events: [] };
   }
 }
 

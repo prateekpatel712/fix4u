@@ -89,6 +89,42 @@ export function contactFounderAlert(input: {
   return { subject, html: layout({ heading: "New lead 🎉", bodyHtml }), text };
 }
 
+/* ------------------------------ Booking ------------------------------ */
+
+export function bookingLeadConfirmation(input: { name: string; date: string; time: string }): EmailContent {
+  const subject = "Your Fix4U discovery call is booked";
+  const bodyHtml = `<p>Hi ${esc(input.name)},</p>
+    <p>You're booked in for a free 15-minute discovery call:</p>
+    <p style="font-size:18px;font-weight:700;">${esc(input.date)} &middot; ${esc(input.time)}</p>
+    <p>We'll send a calendar invite with the Google Meet link shortly. See you then!</p>`;
+  const text = `Hi ${input.name},\n\nYou're booked in for a free 15-minute discovery call:\n${input.date} · ${input.time}\n\nWe'll send a calendar invite with the Google Meet link shortly.\n\n— Fix4U`;
+  return { subject, html: layout({ heading: "Your call is booked 🎉", bodyHtml }), text };
+}
+
+export function bookingFounderAlert(input: {
+  name: string;
+  email: string;
+  business?: string;
+  niche?: string;
+  date: string;
+  time: string;
+  notes?: string;
+}): EmailContent {
+  const subject = `New booking: ${input.name} — ${input.date} ${input.time}`;
+  const bodyHtml = `<p><strong>New discovery call booked.</strong></p>
+    <ul>
+      <li><strong>When:</strong> ${esc(input.date)} at ${esc(input.time)}</li>
+      <li><strong>Name:</strong> ${esc(input.name)}</li>
+      <li><strong>Email:</strong> ${esc(input.email)}</li>
+      ${input.business ? `<li><strong>Business:</strong> ${esc(input.business)}</li>` : ""}
+      ${input.niche ? `<li><strong>Niche:</strong> ${esc(input.niche)}</li>` : ""}
+    </ul>
+    ${input.notes ? `<p><strong>Their #1 funnel leak:</strong><br>${esc(input.notes).replace(/\n/g, "<br>")}</p>` : ""}
+    <p>Add it to your calendar and send the invite.</p>`;
+  const text = `New discovery call booked.\n\nWhen: ${input.date} at ${input.time}\nName: ${input.name}\nEmail: ${input.email}\nBusiness: ${input.business || "-"}\nNiche: ${input.niche || "-"}\n\nLeak: ${input.notes || "-"}`;
+  return { subject, html: layout({ heading: "New booking 📅", bodyHtml }), text };
+}
+
 /* ------------------------------ Free AI audit ------------------------------ */
 
 export function auditLeadAutoresponder(input: { name: string }): EmailContent {

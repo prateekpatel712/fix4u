@@ -23,7 +23,8 @@ export type LeadSource =
   | "audit_request"
   | "newsletter"
   | "roi_calculator"
-  | "chatbot";
+  | "chatbot"
+  | "booking";
 
 export interface UpsertContactInput {
   email: string;

@@ -40,6 +40,20 @@ export const auditSchema = z.object({
 });
 export type AuditInput = z.infer<typeof auditSchema>;
 
+/** Discovery-call booking from the custom calendar. */
+export const bookingSchema = z.object({
+  name,
+  email,
+  business,
+  niche: z.string().trim().max(80).optional().or(z.literal("")),
+  date: z.string().trim().min(1, "Pick a date.").max(40),
+  time: z.string().trim().min(1, "Pick a time.").max(20),
+  notes: z.string().trim().max(2000).optional().or(z.literal("")),
+  turnstileToken,
+  company: honeypot,
+});
+export type BookingInput = z.infer<typeof bookingSchema>;
+
 /** 2.9 — newsletter / nurture signup. */
 export const newsletterSchema = z.object({
   email,

@@ -6,6 +6,7 @@ import HomeNav from "@/components/HomeNav";
 import Footer from "@/components/Footer";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import Turnstile from "@/components/Turnstile";
+import { whatsappLink, defaultWhatsappMessage } from "@/lib/integrations/whatsapp";
 import { motion } from "framer-motion";
 
 export default function ContactPage() {
@@ -82,7 +83,7 @@ export default function ContactPage() {
               <div className="flex flex-col gap-1">
                 <span className="text-grey-dark uppercase tracking-wider">Fastest reply:</span>
                 <a
-                  href="https://wa.me/919999999999"
+                  href={whatsappLink(defaultWhatsappMessage())}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-paper hover:text-coral transition-colors font-bold mt-1"

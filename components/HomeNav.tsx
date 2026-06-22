@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { X, ArrowRight, MessageCircle } from "lucide-react";
+import { whatsappLink, defaultWhatsappMessage } from "@/lib/integrations/whatsapp";
 
 export default function HomeNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -180,7 +181,7 @@ export default function HomeNav() {
 
         <div className="flex flex-col sm:flex-row gap-4 border-t border-white/[0.05] pt-8 relative z-10 max-w-7xl mx-auto w-full">
           <a
-            href="https://wa.me/919999999999"
+            href={whatsappLink(defaultWhatsappMessage())}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-2 border border-white/[0.08] bg-white/[0.02] py-4 rounded-xl text-paper hover:border-coral transition-all duration-300"

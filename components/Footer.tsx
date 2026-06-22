@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { whatsappLink, defaultWhatsappMessage } from "@/lib/integrations/whatsapp";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -20,14 +21,14 @@ export default function Footer() {
         { label: "Book a call", href: "/book" },
         { label: "Live demo", href: "/demo" },
         { label: "Contact", href: "/contact" },
-        { label: "Free AI audit", href: "/#audit" },
+        { label: "Free AI audit", href: "/contact" },
       ],
     },
     {
       tag: "F4U. 03",
       title: "Connect",
       links: [
-        { label: "WhatsApp", href: "https://wa.me/919999999999" },
+        { label: "WhatsApp", href: whatsappLink(defaultWhatsappMessage()) },
         { label: "Instagram", href: "https://instagram.com" },
         { label: "LinkedIn", href: "https://linkedin.com" },
         { label: "Twitter", href: "https://x.com" },

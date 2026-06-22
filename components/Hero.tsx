@@ -2,6 +2,7 @@
 
 import AnimatedTitle from "@/components/AnimatedTitle";
 import InteractiveLogo from "@/components/InteractiveLogo";
+import PhoneMockup from "@/components/PhoneMockup";
 
 export default function Hero() {
   return (
@@ -37,7 +38,9 @@ export default function Hero() {
         </div>
         {/* Row 3 Right: Logo Monogram Console */}
         <div className="lg:col-span-7 border-b border-black/15 min-h-[350px] lg:h-[50vh] lg:min-h-[480px] max-lg:flex lg:grid lg:grid-cols-7 relative overflow-hidden items-center justify-center lg:gap-0 p-8 lg:p-0">
-          <div className="hidden lg:block lg:col-span-3 lg:border-r border-black/15 h-full" />
+          <div className="hidden lg:flex lg:col-span-3 lg:border-r border-black/15 h-full items-center justify-center p-6">
+            <PhoneMockup />
+          </div>
           <div className="lg:col-span-4 h-full w-full relative flex items-center justify-center">
             {/* Center divider line inside col-span-4 to align with Contact button's left edge */}
             <div className="hidden lg:block absolute left-[50%] top-0 bottom-0 w-[1px] bg-black/15 pointer-events-none" />

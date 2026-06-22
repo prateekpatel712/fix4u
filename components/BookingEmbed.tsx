@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Sparkles,
 } from "lucide-react";
+import Turnstile from "@/components/Turnstile";
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 const MONTHS = [
@@ -41,6 +42,9 @@ export default function BookingEmbed() {
     niche: "Med Spa",
     leak: "Slow response to DMs / website queries after-hours",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [token, setToken] = useState("");
 
   // --- calendar grid ---
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
@@ -92,9 +96,35 @@ export default function BookingEmbed() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.business) setStep(3);
+    if (!selectedDate || !selectedTime) return;
+    setError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/book", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          business: formData.business,
+          niche: formData.niche,
+          notes: formData.leak,
+          date: fmtDate(selectedDate),
+          time: selectedTime,
+          turnstileToken: token,
+          company: "",
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) setStep(3);
+      else setError(data.error || "Couldn't confirm your booking. Please try again or message us on WhatsApp.");
+    } catch {
+      setError("Network error. Please try again or message us on WhatsApp.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -331,7 +361,11 @@ export default function BookingEmbed() {
               />
             </div>
 
-            <div className="flex gap-4 mt-4">
+            <Turnstile onToken={setToken} />
+
+            {error && <p className="text-red-400 text-xs leading-relaxed">{error}</p>}
+
+            <div className="flex gap-4 mt-2">
               <button
                 type="button"
                 onClick={() => setStep(1)}
@@ -341,9 +375,10 @@ export default function BookingEmbed() {
               </button>
               <button
                 type="submit"
-                className="flex-1 py-4 bg-coral text-ink rounded-xl text-xs uppercase tracking-wider font-bold hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                disabled={submitting}
+                className="flex-1 py-4 bg-coral text-ink rounded-xl text-xs uppercase tracking-wider font-bold hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                Schedule Call
+                {submitting ? "Scheduling…" : "Schedule Call"}
               </button>
             </div>
           </form>

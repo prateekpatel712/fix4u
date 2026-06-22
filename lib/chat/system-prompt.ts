@@ -9,6 +9,7 @@
  */
 
 import type { Faq } from "@/lib/sanity/queries";
+import { FIX4U_FAQS } from "@/lib/content/faqs";
 
 const BRAND_FACTS = `About Fix4U:
 - Fix4U builds custom AI agents that reply instantly and book appointments 24/7 for local service businesses, on WhatsApp, Instagram, and website chat.
@@ -32,7 +33,7 @@ const BEHAVIOR = `How to behave:
 - If they share an email and want follow-up but can't book now, call capture_lead.
 - Never promise specific prices or guarantees beyond what's stated above.`;
 
-function faqBlock(faqs: Faq[]): string {
+function faqBlock(faqs: { question: string; answer: string }[]): string {
   if (!faqs.length) return "";
   const lines = faqs
     .slice(0, 30)
@@ -42,13 +43,15 @@ function faqBlock(faqs: Faq[]): string {
 }
 
 export function buildLiveSystemPrompt(faqs: Faq[] = []): string {
+  // CMS FAQs take priority; fall back to the canonical homepage FAQs so the bot is always grounded.
+  const effectiveFaqs = faqs.length ? faqs : FIX4U_FAQS;
   return `You are the Fix4U assistant — the company's own AI agent, embedded on the Fix4U website. You ARE the product demo: be the proof that this works.
 
 ${BRAND_FACTS}
 
 ${STYLE_RULES}
 
-${BEHAVIOR}${faqBlock(faqs)}`;
+${BEHAVIOR}${faqBlock(effectiveFaqs)}`;
 }
 
 export function buildDemoSystemPrompt(): string {

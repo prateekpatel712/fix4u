@@ -17,6 +17,7 @@ import HomeBacking from "@/components/HomeBacking";
 import HomeCta from "@/components/HomeCta";
 import BookingEmbed from "@/components/BookingEmbed";
 import Footer from "@/components/Footer";
+import { FIX4U_FAQS } from "@/lib/content/faqs";
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -25,32 +26,7 @@ export default function Home() {
     setOpenFaq(openFaq === idx ? null : idx);
   };
 
-  const faqs = [
-    {
-      q: "How much does a custom AI agent cost?",
-      a: "We offer simple, upfront pricing consisting of a one-time setup fee (for training and integrating the bot with your systems) and a flat monthly hosting/maintenance fee. We also offer low-risk pilot programs. Book a call for a custom quote based on your lead volume."
-    },
-    {
-      q: "How long does it take to go live?",
-      a: "Typically, we can build, train, test, and deploy your custom AI agent in under 2 weeks. This includes training it on your exact pricing, services, and FAQ, plus integrating it with your CRM and calendar."
-    },
-    {
-      q: "Where are you based?",
-      a: "We are based in India, operating globally. We sync with your timezone for communications and ensure 24/7 technical monitoring of your AI agents so they never go offline."
-    },
-    {
-      q: "Is my customer data secure?",
-      a: "Yes. All customer data collected via the AI chatbots is encrypted and directly synced to your CRM (e.g. HubSpot). We do not store or resell your leads' data."
-    },
-    {
-      q: "What do you need from me to start?",
-      a: "We just need your service menu, pricing list, and a list of frequently asked questions. We build, train, and test the agent ourselves, then send you a private link to try it out before it goes live."
-    },
-    {
-      q: "What if the AI makes a mistake or doesn't work?",
-      a: "We build strict guardrails into our AI prompts so it only answers questions about your services. If a query is outside its scope, it politely flags it and hands off the conversation to a human. Plus, we back our work with a performance guarantee."
-    }
-  ];
+  const faqs = FIX4U_FAQS;
 
   return (
     <div className="flex flex-col min-h-screen bg-ink">
@@ -150,7 +126,7 @@ export default function Home() {
                     onClick={() => toggleFaq(idx)}
                     className="w-full flex items-center justify-between px-6 py-5 text-left text-paper hover:text-coral transition-colors"
                   >
-                    <span className="font-display font-bold text-sm sm:text-base pr-4">{faq.q}</span>
+                    <span className="font-display font-bold text-sm sm:text-base pr-4">{faq.question}</span>
                     <ChevronDown className={`w-5 h-5 text-grey-dark shrink-0 transition-transform duration-300 ${
                       openFaq === idx ? "rotate-180 text-coral" : ""
                     }`} />
@@ -161,7 +137,7 @@ export default function Home() {
                     }`}
                   >
                     <p className="p-6 text-grey-dark text-xs sm:text-sm leading-relaxed">
-                      {faq.a}
+                      {faq.answer}
                     </p>
                   </div>
                 </div>
@@ -171,7 +147,7 @@ export default function Home() {
         </section>
 
         {/* Final CTA Section with Scheduler */}
-        <section id="book" className="border-b border-white/10 bg-ink relative w-full">
+        <section id="book" className="scroll-mt-20 border-b border-white/10 bg-ink relative w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10">
             <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-start space-y-3">
               <span className="font-mono text-xs text-coral tracking-widest uppercase font-semibold">

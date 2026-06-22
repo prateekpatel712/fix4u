@@ -5,6 +5,7 @@ import HomeNav from "@/components/HomeNav";
 import BookingEmbed from "@/components/BookingEmbed";
 import Footer from "@/components/Footer";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import { whatsappLink, defaultWhatsappMessage } from "@/lib/integrations/whatsapp";
 import { motion } from "framer-motion";
 
 export default function BookPage() {
@@ -76,7 +77,7 @@ export default function BookPage() {
             <div className="border border-dashed border-white/[0.1] rounded-[24px] p-5 text-center flex flex-col gap-2 items-center text-xs text-grey-dark bg-white/[0.005] backdrop-blur-sm">
               <span>Prefer WhatsApp? Message us directly:</span>
               <a
-                href="https://wa.me/919999999999"
+                href={whatsappLink(defaultWhatsappMessage())}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-coral hover:text-paper font-mono uppercase tracking-wider transition-colors font-semibold"

@@ -15,6 +15,7 @@
 import { badRequest, enforceRateLimit, json, readJson } from "@/lib/api";
 import { chatSchema, fieldErrors } from "@/lib/validation";
 import { runChat, chatConfigured } from "@/lib/chat/engine";
+import { MAX_CHAT_USER_MESSAGES } from "@/lib/env";
 
 export const runtime = "nodejs";
 // Don't let the platform cache a streamed conversation.
@@ -38,6 +39,21 @@ export async function POST(req: Request): Promise<Response> {
   if (!parsed.success) return badRequest("Invalid chat payload.", { fields: fieldErrors(parsed.error) });
 
   const { messages, demo } = parsed.data;
+
+  // Hard cap on the demo conversation length (the client also enforces this). Once the visitor
+  // has sent their 10th message, stop generating and steer them to a real booking.
+  const userMessageCount = messages.filter((m) => m.role === "user").length;
+  if (userMessageCount > MAX_CHAT_USER_MESSAGES) {
+    return json(
+      {
+        ok: false,
+        error:
+          "Thanks for trying the demo! You've reached the message limit. Book a free call and we'll take it from here.",
+      },
+      429,
+    );
+  }
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream<Uint8Array>({

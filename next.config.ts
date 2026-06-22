@@ -71,6 +71,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Pin the workspace root so Turbopack ignores the sibling lockfile at the Fix4U root
+  // and treats this folder as the project root (silences the multiple-lockfiles warning).
+  turbopack: { root: __dirname },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
