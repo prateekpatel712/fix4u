@@ -14,10 +14,13 @@ export default function HomeBacking() {
     offset: ["start end", "end start"],
   });
 
-  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [30, 68]);
-  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [36, 80]);
+  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [38, 88]);
+  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [42, 92]);
   const leftPos = useMotionTemplate`${xPercent}%`;
   const topPos = useMotionTemplate`${yPercent}%`;
+
+  // Reveal the video only inside the crosshair box; it grows as you scroll down.
+  const videoClip = useMotionTemplate`inset(1.25rem calc(100% - ${xPercent}%) calc(100% - ${yPercent}%) 1.25rem)`;
 
   const xVal = useTransform(scrollYProgress, [0.15, 0.65], [138, 729]);
   const yVal = useTransform(scrollYProgress, [0.15, 0.65], [192, 899]);
@@ -76,17 +79,20 @@ export default function HomeBacking() {
           </Link>
         </div>
 
-        {/* Right: full-bleed crosshair image */}
+        {/* Right: crosshair image */}
         <div className="relative min-h-[440px] lg:min-h-0 overflow-hidden bg-grey/30">
-          <video
-            src="https://cdn.sanity.io/files/unkmsg3i/production/cde12660b1d9c1e245bb80b5ab01c77e4793569a.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
+          {/* Video revealed inside the growing crosshair box */}
+          <motion.div style={{ clipPath: videoClip }} className="absolute inset-0">
+            <video
+              src="/backing.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            />
+          </motion.div>
 
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute left-[1.25rem] top-0 bottom-0 w-px bg-ink/15" />

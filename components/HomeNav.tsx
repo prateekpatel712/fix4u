@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { X, ArrowRight, MessageCircle } from "lucide-react";
 
 export default function HomeNav() {
@@ -56,7 +57,6 @@ export default function HomeNav() {
   const navLinks = [
     { label: "How it works", href: "/#how-it-works" },
     { label: "The Agent", href: "/ai-booking-agent" },
-    { label: "Results", href: "/results" },
     { label: "About", href: "/about" },
   ];
 
@@ -90,12 +90,15 @@ export default function HomeNav() {
             href="/"
             className={`flex items-center gap-2.5 sm:gap-3 px-4 md:px-8 border-r ${logoLine} ${logoText} shrink-0 group select-none transition-colors duration-300`}
           >
-            <span className={`flex items-center justify-center border ${logoLine} p-1.5 sm:p-2`}>
-              <svg viewBox="0 0 1107 828" className="w-5 h-4 sm:w-6 sm:h-[18px] fill-current">
-                <polygon points="841.5,198 913.5,126 913.5,54 409.5,54 193.5,270 193.5,342 337.5,342 481.5,198" />
-                <polygon points="985.5,198 841.5,198 697.5,342 337.5,342 121.5,558 121.5,630 265.5,630 409.5,486 769.5,486 985.5,270" />
-                <polygon points="265.5,630 193.5,702 193.5,774 697.5,774 913.5,558 913.5,486 769.5,486 625.5,630" />
-              </svg>
+            <span className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-ink shrink-0">
+              <Image
+                src="/logo-c.png"
+                alt="Fix4U"
+                fill
+                sizes="40px"
+                priority
+                className="object-cover scale-[1.08]"
+              />
             </span>
             <span className="font-display font-bold text-lg sm:text-2xl tracking-tight leading-none hidden min-[380px]:inline">
               fix4u

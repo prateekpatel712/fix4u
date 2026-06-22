@@ -13,7 +13,7 @@ import {
   CheckCircle,
   HelpCircle
 } from "lucide-react";
-import Header from "@/components/Header";
+import HomeNav from "@/components/HomeNav";
 import Footer from "@/components/Footer";
 
 export default function AiBookingAgent() {
@@ -75,9 +75,9 @@ export default function AiBookingAgent() {
 
   return (
     <div className="flex flex-col min-h-screen bg-ink">
-      <Header />
+      <HomeNav />
 
-      <main className="flex-grow font-sans relative z-10 w-full">
+      <main className="flex-grow font-sans relative z-10 w-full pt-20">
         {/* Service Hero */}
         <section className="grid grid-cols-1 lg:grid-cols-12 w-full border-b border-white/10">
           <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col gap-6 justify-center items-start">

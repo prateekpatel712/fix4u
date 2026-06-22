@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, Menu, X, MessageCircle, Sparkles } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 
 interface HeaderProps {
   isOpen?: boolean;
@@ -18,26 +19,6 @@ export default function Header({ isOpen: propIsOpen, setIsOpen: propSetIsOpen }:
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  const [menuTransitionClass, setMenuTransitionClass] = useState("-translate-y-full");
-  const [disableTransition, setDisableTransition] = useState(true);
-
-  useEffect(() => {
-    if (isOpen) {
-      setDisableTransition(false);
-      const timer = setTimeout(() => {
-        setMenuTransitionClass("translate-y-0");
-      }, 10);
-      return () => clearTimeout(timer);
-    } else {
-      setMenuTransitionClass("translate-y-full");
-      const timer = setTimeout(() => {
-        setDisableTransition(true);
-        setMenuTransitionClass("-translate-y-full");
-      }, 700);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 30);
@@ -49,7 +30,6 @@ export default function Header({ isOpen: propIsOpen, setIsOpen: propSetIsOpen }:
   const navLinks = [
     { label: "How it works", href: "/#how-it-works" },
     { label: "The Agent", href: "/ai-booking-agent" },
-    { label: "Results", href: "/results" },
     { label: "About", href: "/about" },
   ];
 
@@ -68,10 +48,9 @@ export default function Header({ isOpen: propIsOpen, setIsOpen: propSetIsOpen }:
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative w-8 h-8 flex items-center justify-center border border-white/[0.08] bg-white/[0.02] rounded-xl overflow-hidden group-hover:border-coral/40 transition-colors duration-300">
-              <span className="font-display font-black italic text-coral text-sm tracking-tighter">F4U</span>
-              <div className="absolute inset-0 bg-gradient-to-tr from-coral/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
+            <span className="relative w-9 h-9 rounded-full overflow-hidden bg-ink shrink-0">
+              <Image src="/logo-c.png" alt="Fix4U" fill sizes="36px" priority className="object-cover scale-[1.08]" />
+            </span>
             <span className="font-display font-bold text-lg tracking-tight text-paper group-hover:text-coral transition-colors duration-300">
               fix<span className="text-coral">4</span>u
             </span>
@@ -83,13 +62,15 @@ export default function Header({ isOpen: propIsOpen, setIsOpen: propSetIsOpen }:
               <Link
                 key={link.label}
                 href={link.href}
-                className="relative text-grey hover:text-paper font-sans text-xs font-semibold uppercase tracking-widest transition-colors duration-300 py-1 group overflow-hidden"
+                className="text-grey font-sans text-xs font-semibold uppercase tracking-widest py-1 group"
               >
-                <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">
-                  {link.label}
-                </span>
-                <span className="absolute left-0 top-0 inline-block translate-y-full transition-transform duration-300 group-hover:translate-y-0 text-coral font-bold">
-                  {link.label}
+                <span className="relative block overflow-hidden h-[1.2em]">
+                  <span className="flex items-center h-full transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    {link.label}
+                  </span>
+                  <span className="absolute inset-0 flex items-center transition-transform duration-300 ease-out translate-y-full group-hover:translate-y-0 text-coral font-bold">
+                    {link.label}
+                  </span>
                 </span>
               </Link>
             ))}
@@ -190,9 +171,9 @@ export default function Header({ isOpen: propIsOpen, setIsOpen: propSetIsOpen }:
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-ink md:hidden flex flex-col justify-between p-8 pt-28 ${
-          disableTransition ? "transition-none" : "transition-transform duration-700 ease-in-out"
-        } ${menuTransitionClass}`}
+        className={`fixed inset-0 z-40 bg-ink md:hidden flex flex-col justify-between p-8 pt-28 transition-transform duration-700 ease-in-out ${
+          isOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
         {/* Glow meshes */}
         <div className="absolute inset-0 mesh-gradient opacity-15 pointer-events-none" />

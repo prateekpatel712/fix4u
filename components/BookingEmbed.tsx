@@ -279,7 +279,7 @@ export default function BookingEmbed() {
                   type="email"
                   name="email"
                   required
-                  placeholder="maya@clinicname.com"
+                  placeholder="maya@yourbusiness.com"
                   value={formData.email}
                   onChange={handleInputChange}
                   className="bg-ink border border-white/[0.06] rounded-xl px-4 py-3.5 text-xs sm:text-sm text-paper focus:outline-none focus:border-coral transition-colors"

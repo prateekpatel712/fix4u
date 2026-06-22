@@ -10,7 +10,6 @@ export default function Footer() {
       links: [
         { label: "How it works", href: "/#how-it-works" },
         { label: "The Agent", href: "/ai-booking-agent" },
-        { label: "Results", href: "/results" },
         { label: "About", href: "/about" },
       ],
     },

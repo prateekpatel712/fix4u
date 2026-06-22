@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, MessageCircle, Send, CheckCircle, Mail } from "lucide-react";
-import Header from "@/components/Header";
+import { MessageCircle, Send, CheckCircle, Mail } from "lucide-react";
+import HomeNav from "@/components/HomeNav";
 import Footer from "@/components/Footer";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import Turnstile from "@/components/Turnstile";
 import { motion } from "framer-motion";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,10 +25,26 @@ export default function ContactPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
-      setSubmitted(true);
+    setError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...formData, turnstileToken: token, company: "" }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || "Something went wrong. Please try again or message us on WhatsApp.");
+      }
+    } catch {
+      setError("Network error. Please try again or message us on WhatsApp.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -34,9 +54,9 @@ export default function ContactPage() {
       <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-coral/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-violet/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <Header />
+      <HomeNav />
 
-      <main className="flex-grow font-sans relative z-10 w-full">
+      <main className="flex-grow font-sans relative z-10 w-full pt-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 w-full">
           {/* Left Column: Contact details */}
           <motion.div 
@@ -149,7 +169,7 @@ export default function ContactPage() {
                     type="email"
                     name="email"
                     required
-                    placeholder="maya@clinicname.com"
+                    placeholder="maya@yourbusiness.com"
                     value={formData.email}
                     onChange={handleInputChange}
                     className="bg-white/[0.01] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-paper focus:outline-none focus:border-coral focus:ring-1 focus:ring-coral/50 transition-all duration-300 placeholder:text-grey-dark/50"
@@ -187,12 +207,19 @@ export default function ContactPage() {
                   />
                 </div>
 
+                <Turnstile onToken={setToken} />
+
+                {error && (
+                  <p className="text-red-400 text-xs leading-relaxed -mt-1">{error}</p>
+                )}
+
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="w-full py-4 bg-coral text-ink rounded-xl font-bold text-xs uppercase tracking-wider hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2 shadow-lg shadow-coral/10"
+                  disabled={submitting}
+                  className="w-full py-4 bg-coral text-ink rounded-xl font-bold text-xs uppercase tracking-wider hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2 shadow-lg shadow-coral/10 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  Send Message <Send className="w-4 h-4" />
+                  {submitting ? "Sending…" : <>Send Message <Send className="w-4 h-4" /></>}
                 </button>
               </form>
             )}

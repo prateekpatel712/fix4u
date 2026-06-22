@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 export default function InteractiveLogo() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,48 +64,6 @@ export default function InteractiveLogo() {
   const offsetX = (smoothMouse.x - 0.5) * 80;
   const offsetY = (smoothMouse.y - 0.5) * 60;
 
-  // Base polygon definitions from Enerblock structure, shifting them to create perspective
-  const pointsA = [
-    [841.5 + offsetX * 0.6, 198 + offsetY * 0.6],
-    [913.5 + offsetX * 0.8, 126 + offsetY * 0.4],
-    [913.5 + offsetX * 0.8, 54 + offsetY * 0.2],
-    [409.5 + offsetX * 0.2, 54 + offsetY * 0.2],
-    [193.5 - offsetX * 0.2, 270 + offsetY * 0.4],
-    [193.5 - offsetX * 0.2, 342 + offsetY * 0.6],
-    [337.5 + offsetX * 0.1, 342 + offsetY * 0.6],
-    [481.5 + offsetX * 0.3, 198 + offsetY * 0.6],
-  ]
-    .map((p) => p.join(","))
-    .join(" ");
-
-  const pointsB = [
-    [985.5 + offsetX * 0.9, 198 + offsetY * 0.6],
-    [841.5 + offsetX * 0.6, 198 + offsetY * 0.6],
-    [697.5 + offsetX * 0.4, 342 + offsetY * 0.6],
-    [337.5 + offsetX * 0.1, 342 + offsetY * 0.6],
-    [121.5 - offsetX * 0.4, 558 + offsetY * 0.8],
-    [121.5 - offsetX * 0.4, 630 + offsetY * 0.9],
-    [265.5 - offsetX * 0.1, 630 + offsetY * 0.9],
-    [409.5 + offsetX * 0.2, 486 + offsetY * 0.8],
-    [769.5 + offsetX * 0.5, 486 + offsetY * 0.8],
-    [985.5 + offsetX * 0.9, 270 + offsetY * 0.7],
-  ]
-    .map((p) => p.join(","))
-    .join(" ");
-
-  const pointsC = [
-    [265.5 - offsetX * 0.1, 630 + offsetY * 0.9],
-    [193.5 - offsetX * 0.3, 702 + offsetY * 0.95],
-    [193.5 - offsetX * 0.3, 774 + offsetY * 1.0],
-    [697.5 + offsetX * 0.4, 774 + offsetY * 1.0],
-    [913.5 + offsetX * 0.8, 558 + offsetY * 0.8],
-    [913.5 + offsetX * 0.8, 486 + offsetY * 0.8],
-    [769.5 + offsetX * 0.5, 486 + offsetY * 0.8],
-    [625.5 + offsetX * 0.3, 630 + offsetY * 0.9],
-  ]
-    .map((p) => p.join(","))
-    .join(" ");
-
   // Tracking grid lines based on smooth mouse
   // Horizontal lines move vertically
   const lineTopY = 113.5 + offsetY * 0.8;
@@ -150,54 +109,24 @@ export default function InteractiveLogo() {
         />
       </div>
 
-      {/* Monogram SVG Logo */}
-      <svg
-        viewBox="0 0 1107 828"
-        className="w-[90%] h-[90%] select-none pointer-events-none transition-all duration-300 group-hover:scale-[1.01]"
-      >
-        {/* Filters for neon glow */}
-        <defs>
-          <filter id="neon-glow-coral" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="neon-glow-violet" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Monogram Polygon A (Black) */}
-        <polygon
-          points={pointsA}
-          fill="#070709"
-          stroke="#070709"
-          strokeWidth="3.5"
-          className="transition-all duration-75"
-        />
-        {/* Monogram Polygon B (Black) */}
-        <polygon
-          points={pointsB}
-          fill="#070709"
-          stroke="#070709"
-          strokeWidth="3.5"
-          className="transition-all duration-75"
-        />
-        {/* Monogram Polygon C (Black) */}
-        <polygon
-          points={pointsC}
-          fill="#070709"
-          stroke="#070709"
-          strokeWidth="3.5"
-          className="transition-all duration-75"
-        />
-      </svg>
+      {/* Crystal emblem — 3D parallax tracking the cursor (idle float when not hovered) */}
+      <div className="relative z-20 flex items-center justify-center w-full h-full [perspective:1000px] pointer-events-none">
+        <div
+          className="relative w-[95%] aspect-square will-change-transform transition-transform duration-75 group-hover:scale-[1.04]"
+          style={{
+            transform: `translate3d(${offsetX * 0.4}px, ${offsetY * 0.4}px, 0) rotateX(${(0.5 - smoothMouse.y) * 18}deg) rotateY(${(smoothMouse.x - 0.5) * 18}deg)`,
+          }}
+        >
+          <Image
+            src="/logo-dark.png"
+            alt="Fix4U"
+            fill
+            priority
+            sizes="(max-width: 768px) 60vw, 340px"
+            className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.22)]"
+          />
+        </div>
+      </div>
 
       {/* Corner Technical Labels */}
       <div className="absolute top-4 left-5 text-[9px] text-ink font-mono uppercase tracking-widest opacity-60">

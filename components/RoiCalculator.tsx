@@ -99,7 +99,7 @@ export default function RoiCalculator() {
             />
             <div className="flex justify-between text-[9px] text-grey-dark font-mono uppercase tracking-wider opacity-60">
               <span>10% (industry average)</span>
-              <span>80% (busy / solo clinic)</span>
+              <span>80% (busy / solo business)</span>
             </div>
           </div>
         </div>

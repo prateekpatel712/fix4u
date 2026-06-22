@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Header from "@/components/Header";
+import HomeNav from "@/components/HomeNav";
 import Footer from "@/components/Footer";
 
 export default function PrivacyPage() {
@@ -9,9 +9,9 @@ export default function PrivacyPage() {
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-coral/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-violet/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <Header />
+      <HomeNav />
 
-      <main className="flex-grow font-sans relative z-10 w-full">
+      <main className="flex-grow font-sans relative z-10 w-full pt-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 w-full">
           {/* Left Column: Title and Metadata */}
           <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-start space-y-4">

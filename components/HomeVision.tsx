@@ -16,11 +16,14 @@ export default function HomeVision() {
   });
 
   // Map to position percentages for the moving crosshair lines
-  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [45.7, 81.5]);
-  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [53.5, 83.7]);
+  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [38, 88]);
+  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [42, 92]);
 
   const leftPos = useMotionTemplate`${xPercent}%`;
   const topPos = useMotionTemplate`${yPercent}%`;
+
+  // Reveal the video only inside the crosshair box; it grows as you scroll down.
+  const videoClip = useMotionTemplate`inset(1.25rem calc(100% - ${xPercent}%) calc(100% - ${yPercent}%) 1.25rem)`;
 
   // Numeric coordinates to show in the UI
   const xVal = useTransform(scrollYProgress, [0.15, 0.65], [457, 940]);
@@ -50,16 +53,18 @@ export default function HomeVision() {
       <div className="grid grid-cols-1 lg:grid-cols-12 w-full relative z-10 lg:min-h-screen items-stretch">
         {/* Left Column: Full-bleed Scroll-Driven Crosshair Image */}
         <div className="lg:col-span-5 lg:border-r border-ink/10 relative min-h-[440px] lg:min-h-0 overflow-hidden bg-grey/30">
-          {/* Image / video fills the column edge-to-edge */}
-          <video
-            src="https://cdn.sanity.io/files/unkmsg3i/production/cde12660b1d9c1e245bb80b5ab01c77e4793569a.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
+          {/* Video revealed inside the growing crosshair box */}
+          <motion.div style={{ clipPath: videoClip }} className="absolute inset-0">
+            <video
+              src="/vision.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            />
+          </motion.div>
 
           {/* Crosshair Overlay */}
           <div className="absolute inset-0 pointer-events-none">
@@ -113,7 +118,7 @@ export default function HomeVision() {
               className="font-display font-black text-[clamp(1.6rem,4.6vw,4.3333rem)] text-ink tracking-tight leading-[1.04]"
             />
             <p className="text-ink/60 text-base md:text-lg leading-relaxed max-w-xl">
-              We govern, automate, and monitor the lead capture stage of local service clinics, bringing digital precision where manual receptionist follow-ups leak revenue.
+              We govern, automate, and monitor the lead capture stage of local service businesses, bringing digital precision where manual receptionist follow-ups leak revenue.
             </p>
           </div>
 
@@ -165,7 +170,7 @@ export default function HomeVision() {
               </div>
               <div className="space-y-8">
                 <p className="text-ink/75 text-base md:text-lg leading-relaxed">
-                  We manage the cloud infrastructure, monitor conversation models, and modify scripts directly to adapt to your seasonal clinic adjustments.
+                  We manage the cloud infrastructure, monitor conversation models, and modify scripts directly to adapt to your seasonal business adjustments.
                 </p>
                 <Link
                   href="/about"

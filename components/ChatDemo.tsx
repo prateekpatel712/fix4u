@@ -1,23 +1,27 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Sparkles } from "lucide-react";
+import { Send, Bot, User, ArrowUpRight } from "lucide-react";
 
 interface Message {
   sender: "bot" | "user";
   text: string;
   timestamp: string;
+  action?: { label: string; url: string };
 }
 
+const stamp = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+const GREETING: Message = {
+  sender: "bot",
+  text: "Hi! I'm the AI assistant for Sunrise Med Spa. 🌸 How can I help you today?",
+  timestamp: "12:00 PM",
+};
+
 export default function ChatDemo() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      sender: "bot",
-      text: "Hi! I'm the AI assistant for Sunrise Med Spa. 🌸 How can I help you today?",
-      timestamp: "12:00 PM",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [isTyping, setIsTyping] = useState(false);
+  const [input, setInput] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
 
@@ -27,178 +31,114 @@ export default function ChatDemo() {
     "How much is a Botox treatment?",
   ];
 
-  const conversationFlow: Record<string, { reply: string[]; nextPrompts: string[] }> = {
-    "Do you have openings tomorrow?": {
-      reply: [
-        "Yes, we do! We have openings for consultations or treatments tomorrow at 10:00 AM, 1:30 PM, and 4:00 PM.",
-        "Which of those times works best for you?",
-      ],
-      nextPrompts: ["1:30 PM works!", "What is your pricing first?"],
-    },
-    "What services do you offer?": {
-      reply: [
-        "We specialize in premium aesthetic treatments: Dermal Fillers, Botox, Laser Skin Resurfacing, and Custom Facials.",
-        "Would you like to book a free 15-minute consultation to see which is right for you?",
-      ],
-      nextPrompts: ["Yes, let's book a consultation", "Botox pricing please"],
-    },
-    "How much is a Botox treatment?": {
-      reply: [
-        "Botox is $12 per unit, and typical treatments range from $180 to $360 depending on your goals.",
-        "We also offer a complimentary consultation for first-time clients. Shall we get you scheduled?",
-      ],
-      nextPrompts: ["Yes, let's schedule it", "No thanks, just looking"],
-    },
-    "1:30 PM works!": {
-      reply: [
-        "Awesome! To reserve 1:30 PM tomorrow, could you please provide your full name and email address?",
-      ],
-      nextPrompts: ["Maya Lin, maya@example.com"],
-    },
-    "What is your pricing first?": {
-      reply: [
-        "Of course! Consultation is free. Botox is $12/unit, Fillers start at $550/syringe, and Facials are $120.",
-        "Would you like to reserve that 1:30 PM slot while it's still available?",
-      ],
-      nextPrompts: ["Yes, let's do 1:30 PM", "No, too expensive"],
-    },
-    "Yes, let's book a consultation": {
-      reply: [
-        "Excellent choice! I have slots open tomorrow at 10:00 AM and 1:30 PM. Which works best?",
-      ],
-      nextPrompts: ["10:00 AM works", "1:30 PM works!"],
-    },
-    "Botox pricing please": {
-      reply: [
-        "Botox is $12 per unit, with first-time consultations being completely free.",
-        "Would you like to book a slot for a Botox consultation tomorrow?",
-      ],
-      nextPrompts: ["Yes, let's book a consultation"],
-    },
-    "Yes, let's schedule it": {
-      reply: [
-        "Perfect! I have slots open tomorrow at 1:30 PM and 4:00 PM. Which works best?",
-      ],
-      nextPrompts: ["1:30 PM works!", "4:00 PM works"],
-    },
-    "No thanks, just looking": {
-      reply: [
-        "No problem at all! Feel free to ask if you have any questions. Have a wonderful day!",
-      ],
-      nextPrompts: ["Actually, what services do you have?"],
-    },
-    "Maya Lin, maya@example.com": {
-      reply: [
-        "Perfect, Maya! I have locked in your Botox Consultation for tomorrow (Friday) at 1:30 PM. 🎉",
-        "A calendar invite has been sent to maya@example.com, and we'll send a text reminder 2 hours before. See you soon!",
-      ],
-      nextPrompts: ["Awesome, thank you!"],
-    },
-    "Yes, let's do 1:30 PM": {
-      reply: [
-        "Great! To finalize, could you share your name and email?",
-      ],
-      nextPrompts: ["Maya Lin, maya@example.com"],
-    },
-    "No, too expensive": {
-      reply: [
-        "We understand! We occasionally run promotions. Would you like us to notify you next time we do?",
-      ],
-      nextPrompts: ["Yes, notify me", "No thanks"],
-    },
-    "10:00 AM works": {
-      reply: [
-        "Great! Can I get your name and email to finalize the booking?",
-      ],
-      nextPrompts: ["Maya Lin, maya@example.com"],
-    },
-    "4:00 PM works": {
-      reply: [
-        "Great! Can I get your name and email to finalize the booking?",
-      ],
-      nextPrompts: ["Maya Lin, maya@example.com"],
-    },
-    "Awesome, thank you!": {
-      reply: [
-        "You're very welcome! If you need to reschedule, just click the link in your email. See you tomorrow!",
-      ],
-      nextPrompts: [],
-    },
-    "Yes, notify me": {
-      reply: [
-        "Perfect! Please enter your phone number to get added to our promo list.",
-      ],
-      nextPrompts: ["+1 (555) 019-2834"],
-    },
-    "+1 (555) 019-2834": {
-      reply: [
-        "Got it! You're all set. We'll text you when our next special runs. Have a great day!",
-      ],
-      nextPrompts: [],
-    },
-  };
-
-  const [activePrompts, setActivePrompts] = useState<string[]>(suggestedPrompts);
-
   useEffect(() => {
-    // Skip the initial mount so a page refresh never yanks the window down to
-    // this below-the-fold chat. After that, keep the chat panel itself pinned
-    // to the latest message — scroll the container only, not the page.
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
     const container = chatContainerRef.current;
-    if (container) {
-      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
-    }
+    if (container) container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
   }, [messages, isTyping]);
 
-  const handlePromptClick = (prompt: string) => {
-    const userMsg: Message = {
-      sender: "user",
-      text: prompt,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
+  const send = async (raw: string) => {
+    const text = raw.trim();
+    if (!text || isTyping) return;
 
-    setMessages((prev) => [...prev, userMsg]);
-    setActivePrompts([]);
+    const history = [...messages, { sender: "user", text, timestamp: stamp() } as Message];
+    setMessages(history);
+    setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      setIsTyping(false);
-      const flow = conversationFlow[prompt];
+    // Drop the seeded greeting and map to the API's role format.
+    const payload = history.slice(1).map((m) => ({
+      role: m.sender === "user" ? "user" : "assistant",
+      content: m.text,
+    }));
 
-      if (flow) {
-        const botMsgs: Message[] = flow.reply.map((txt) => ({
-          sender: "bot",
-          text: txt,
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        }));
-        setMessages((prev) => [...prev, ...botMsgs]);
-        setActivePrompts(flow.nextPrompts);
-      } else {
-        const fallbackMsg: Message = {
-          sender: "bot",
-          text: "I'd be happy to assist you with that! Let's connect you with our booking page so you can select the perfect slot.",
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        };
-        setMessages((prev) => [...prev, fallbackMsg]);
-        setActivePrompts([]);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages: payload, demo: true }),
+      });
+
+      if (!res.ok || !res.body) {
+        let msg = "The assistant isn't available right now. Please use the contact form or WhatsApp.";
+        try {
+          const j = (await res.json()) as { error?: string };
+          if (j?.error) msg = j.error;
+        } catch {}
+        setIsTyping(false);
+        setMessages((p) => [...p, { sender: "bot", text: msg, timestamp: stamp() }]);
+        return;
       }
-    }, 1200);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let botText = "";
+      let botAction: Message["action"];
+      let started = false;
+
+      const paint = () =>
+        setMessages((p) => {
+          const next = [...p];
+          const last = next[next.length - 1];
+          if (last?.sender === "bot") next[next.length - 1] = { ...last, text: botText, action: botAction };
+          return next;
+        });
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split("\n\n");
+        buffer = parts.pop() || "";
+        for (const part of parts) {
+          const line = part.trim();
+          if (!line.startsWith("data:")) continue;
+          let evt: { type?: string; delta?: string; action?: string; url?: string; message?: string };
+          try {
+            evt = JSON.parse(line.slice(5).trim());
+          } catch {
+            continue;
+          }
+          if (evt.type === "text") {
+            if (!started) {
+              started = true;
+              setIsTyping(false);
+              setMessages((p) => [...p, { sender: "bot", text: "", timestamp: stamp() }]);
+            }
+            botText += evt.delta || "";
+            paint();
+          } else if (evt.type === "action" && evt.url) {
+            botAction = {
+              label:
+                evt.action === "book_call"
+                  ? "Book a call"
+                  : evt.action === "handoff_whatsapp"
+                  ? "Chat on WhatsApp"
+                  : "Open",
+              url: evt.url,
+            };
+            if (started) paint();
+          } else if (evt.type === "error" && !started) {
+            setIsTyping(false);
+            setMessages((p) => [...p, { sender: "bot", text: evt.message || "Something went wrong.", timestamp: stamp() }]);
+          }
+        }
+      }
+      setIsTyping(false);
+    } catch {
+      setIsTyping(false);
+      setMessages((p) => [...p, { sender: "bot", text: "Connection error. Please try again.", timestamp: stamp() }]);
+    }
   };
 
   const resetChat = () => {
-    setMessages([
-      {
-        sender: "bot",
-        text: "Hi! I'm the AI assistant for Sunrise Med Spa. 🌸 How can I help you today?",
-        timestamp: "12:00 PM",
-      },
-    ]);
-    setActivePrompts(suggestedPrompts);
+    setMessages([GREETING]);
     setIsTyping(false);
+    setInput("");
   };
 
   return (
@@ -224,7 +164,7 @@ export default function ChatDemo() {
         </div>
         <button
           onClick={resetChat}
-          className="text-[10px] text-grey hover:text-coral transition-colors duration-300 font-mono uppercase tracking-wider"
+          className="text-[10px] text-grey hover:text-coral transition-colors duration-300 font-mono uppercase tracking-wider cursor-pointer"
         >
           Reset
         </button>
@@ -235,9 +175,7 @@ export default function ChatDemo() {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex items-start gap-3 max-w-[85%] ${
-              msg.sender === "user" ? "ml-auto flex-row-reverse" : ""
-            }`}
+            className={`flex items-start gap-3 max-w-[85%] ${msg.sender === "user" ? "ml-auto flex-row-reverse" : ""}`}
           >
             <div
               className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border text-xs ${
@@ -256,21 +194,19 @@ export default function ChatDemo() {
                     : "bg-white/[0.01] border border-white/[0.05] text-paper rounded-tl-none"
                 }`}
               >
-                {msg.text.includes("Appointment booked") || msg.text.includes("locked in") ? (
-                  <span className="flex flex-col gap-2">
-                    <span className="flex items-center gap-1.5 text-coral font-bold font-display uppercase text-xs tracking-wider">
-                      <Sparkles className="w-4 h-4 text-coral shrink-0" />
-                      Slot Confirmed
-                    </span>
-                    <span>{msg.text}</span>
-                  </span>
-                ) : (
-                  msg.text
+                {msg.text}
+                {msg.action && (
+                  <a
+                    href={msg.action.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1.5 bg-coral text-ink font-bold text-[11px] uppercase tracking-wider px-3 py-2 rounded-lg hover:scale-[1.02] transition-transform"
+                  >
+                    {msg.action.label} <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
                 )}
               </div>
-              <span className="text-[9px] text-grey-dark self-start px-1 font-mono opacity-60">
-                {msg.timestamp}
-              </span>
+              <span className="text-[9px] text-grey-dark self-start px-1 font-mono opacity-60">{msg.timestamp}</span>
             </div>
           </div>
         ))}
@@ -291,13 +227,13 @@ export default function ChatDemo() {
         )}
       </div>
 
-      {/* Suggested Prompts */}
-      {activePrompts.length > 0 && (
+      {/* Suggested prompts (only before the conversation starts) */}
+      {messages.length === 1 && (
         <div className="px-6 py-3 border-t border-white/[0.03] bg-white/[0.01] flex flex-wrap gap-2">
-          {activePrompts.map((prompt) => (
+          {suggestedPrompts.map((prompt) => (
             <button
               key={prompt}
-              onClick={() => handlePromptClick(prompt)}
+              onClick={() => send(prompt)}
               className="text-xs bg-ink hover:bg-coral hover:text-ink text-grey border border-white/[0.08] rounded-xl px-3.5 py-2 transition-all duration-300 font-semibold cursor-pointer"
             >
               {prompt}
@@ -306,21 +242,30 @@ export default function ChatDemo() {
         </div>
       )}
 
-      {/* Input Form Placeholder */}
-      <div className="px-6 py-4 border-t border-white/[0.05] bg-white/[0.01] flex items-center gap-3">
+      {/* Input */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          send(input);
+        }}
+        className="px-6 py-4 border-t border-white/[0.05] bg-white/[0.01] flex items-center gap-3"
+      >
         <input
           type="text"
-          placeholder="Use the quick actions above to chat..."
-          disabled
-          className="flex-1 bg-ink/50 border border-white/[0.05] rounded-xl px-4 py-2.5 text-xs text-grey-dark cursor-not-allowed"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask about services, pricing, or booking…"
+          disabled={isTyping}
+          className="flex-1 bg-ink/50 border border-white/[0.05] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-paper focus:outline-none focus:border-coral transition-colors disabled:opacity-60"
         />
         <button
-          disabled
-          className="p-2.5 bg-white/[0.02] border border-white/[0.05] rounded-xl text-grey-dark cursor-not-allowed"
+          type="submit"
+          disabled={isTyping || !input.trim()}
+          className="p-2.5 bg-coral text-ink rounded-xl transition-all hover:scale-[1.03] disabled:bg-white/[0.02] disabled:text-grey-dark disabled:scale-100 disabled:cursor-not-allowed cursor-pointer"
         >
           <Send className="w-4 h-4" />
         </button>
-      </div>
+      </form>
     </div>
   );
 }

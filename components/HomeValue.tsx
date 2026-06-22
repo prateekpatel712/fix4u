@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Plus, Minus, Zap, Clock, ShieldCheck } from "lucide-react";
 import AnimatedTitle from "@/components/AnimatedTitle";
 
@@ -14,18 +15,21 @@ export default function HomeValue() {
       desc: "Every enquiry on WhatsApp, Instagram, and web chat gets an instant reply — in under 10 seconds — so you never lose a lead to whoever answers first.",
       link: "/ai-booking-agent",
       icon: <Zap className="w-10 h-10 text-ink/70" />,
+      image: "/speed-to-lead.jpg",
     },
     {
       title: "Always on",
       desc: "Your AI receptionist books appointments through the night, on weekends, and over holidays — capturing revenue while your front desk is closed.",
       link: "/ai-booking-agent",
       icon: <Clock className="w-10 h-10 text-ink/70" />,
+      image: "/always-on.jpg",
     },
     {
       title: "Fully managed",
       desc: "We build, train, host, and monitor the entire system. You receive booked appointments; we handle the infrastructure, tuning, and uptime.",
       link: "/about",
       icon: <ShieldCheck className="w-10 h-10 text-ink/70" />,
+      image: "/managed-ai.jpg",
     },
   ];
 
@@ -96,8 +100,18 @@ export default function HomeValue() {
                         </span>
                       </Link>
                     </div>
-                    <div className="aspect-[16/11] bg-ink/[0.04] border border-ink/10 flex items-center justify-center">
-                      {item.icon}
+                    <div className="relative aspect-[16/11] bg-ink/[0.04] border border-ink/10 flex items-center justify-center overflow-hidden">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 40vw"
+                          className="object-contain p-2"
+                        />
+                      ) : (
+                        item.icon
+                      )}
                     </div>
                   </div>
                 </div>

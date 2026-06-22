@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Bot, Laptop, Search } from "lucide-react";
 
 // Height (px) of the collapsed pinned strip — number + label + image sliver.
@@ -16,6 +17,7 @@ export default function HomeStack() {
       title: "AI Booking Agent",
       desc: "Custom-trained chatbot receptionists operating on WhatsApp, Instagram DMs, and Web Chat. They reply instantly, answer treatment FAQs, filter out tyre-kickers, and book slots directly in your calendar.",
       icon: <Bot className="w-10 h-10 text-ink/80" />,
+      image: "/ai-booking-agent.jpg",
       link: "/ai-booking-agent",
     },
     {
@@ -24,6 +26,7 @@ export default function HomeStack() {
       title: "Conversion Website",
       desc: "Super-fast, custom-coded landing pages designed to capture local search and ad traffic. Optimized to run at 100/100 Lighthouse performance scores and direct leads immediately into the chat receptionist.",
       icon: <Laptop className="w-10 h-10 text-ink/80" />,
+      image: "/conversion-website.jpg",
       link: "/book",
     },
     {
@@ -32,6 +35,7 @@ export default function HomeStack() {
       title: "Targeted Acquisition",
       desc: "Local search SEO configurations and paid ad setups (Instagram/Facebook/Google Ads) tuned to generate qualified leads that feed directly into your WhatsApp and web chatbot funnels.",
       icon: <Search className="w-10 h-10 text-ink/80" />,
+      image: "/targeted-acquisition-v3.jpg",
       link: "/book",
     },
   ];
@@ -45,7 +49,7 @@ export default function HomeStack() {
             Acquisition Pillars
           </span>
           <h2 className="font-display font-medium text-[clamp(2rem,4vw,3.5rem)] text-ink tracking-tight leading-[1.05] max-w-xl">
-            Integrated funnel technology for local service clinics
+            Integrated funnel technology for local service businesses
           </h2>
         </div>
         <div className="hidden lg:block lg:col-span-5" />
@@ -69,15 +73,25 @@ export default function HomeStack() {
 
               {/* Visual panel */}
               <div className="md:col-span-4 md:border-r border-ink/10 relative bg-ink/[0.03] min-h-[220px] flex items-center justify-center overflow-hidden">
-                {item.icon}
+                {item.image ? (
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-top"
+                  />
+                ) : (
+                  item.icon
+                )}
               </div>
 
               {/* Text */}
               <div className="md:col-span-6 lg:col-span-7 px-6 pt-6 pb-10 md:px-10 lg:px-14 flex flex-col">
-                <h3 className="font-display font-medium text-[clamp(1.6rem,2.6vw,2.4rem)] text-ink tracking-tight leading-[1.1] mt-14 max-w-md">
+                <h3 className="font-display font-medium text-2xl md:text-3xl text-ink tracking-tight leading-[1.1]">
                   {item.title}
                 </h3>
-                <p className="text-ink/65 text-base leading-relaxed mt-6 max-w-md">
+                <p className="text-ink/65 text-base leading-relaxed mt-10 max-w-md">
                   {item.desc}
                 </p>
                 <Link

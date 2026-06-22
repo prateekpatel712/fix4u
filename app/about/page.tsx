@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight, ShieldCheck, Mail, Phone, Users, CheckCircle, Sparkles } from "lucide-react";
-import Header from "@/components/Header";
+import HomeNav from "@/components/HomeNav";
 import Footer from "@/components/Footer";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import { motion } from "framer-motion";
@@ -19,7 +19,7 @@ export default function AboutPage() {
     },
     {
       title: "Timezone Alignment Support",
-      desc: "Solo founders based in India selling to international clients often fail on timezone support. We align directly with your clinic's business hours, offering direct WhatsApp channels for real-time adjustments."
+      desc: "Solo founders based in India selling to international clients often fail on timezone support. We align directly with your business hours, offering direct WhatsApp channels for real-time adjustments."
     }
   ];
 
@@ -29,9 +29,9 @@ export default function AboutPage() {
       <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-coral/5 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-violet/5 rounded-full blur-[130px] pointer-events-none" />
 
-      <Header />
+      <HomeNav />
 
-      <main className="flex-grow font-sans relative z-10 w-full">
+      <main className="flex-grow font-sans relative z-10 w-full pt-20">
         {/* Section 1: Hero & Convictions */}
         <section className="grid grid-cols-1 lg:grid-cols-12 w-full border-b border-white/10">
           <div className="lg:col-span-5 lg:border-r border-white/10 p-8 lg:p-16 flex flex-col justify-start space-y-6">
@@ -91,7 +91,7 @@ export default function AboutPage() {
               Hi, I&apos;m Prateek.
             </h3>
             <p>
-              I founded Fix4U because I watched local business owners—from med spa clinics to dentists—spend thousands of dollars on marketing, only to lose half of their leads because their staff was too busy to answer within 5 minutes.
+              I founded Fix4U because I watched local business owners—from salons and gyms to dentists and law firms—spend thousands of dollars on marketing, only to lose half of their leads because their staff was too busy to answer within 5 minutes.
             </p>
             <p>
               In the modern local market, <strong className="text-paper">speed to lead</strong> is the single greatest competitive advantage. By putting custom AI response agents on autopilot, we ensure that no enquiry is ever lost, no matter if it arrives at 2 AM or during a busy weekend.

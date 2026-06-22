@@ -15,10 +15,14 @@ export default function HomeSystem() {
   });
 
   // Moving crosshair position (percent of the image panel)
-  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [38, 72]);
-  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [42, 78]);
+  const xPercent = useTransform(scrollYProgress, [0.15, 0.65], [38, 88]);
+  const yPercent = useTransform(scrollYProgress, [0.15, 0.65], [42, 92]);
   const leftPos = useMotionTemplate`${xPercent}%`;
   const topPos = useMotionTemplate`${yPercent}%`;
+
+  // Reveal the video only inside the crosshair box (top-left margin → moving point);
+  // it grows and exposes more of the clip as you scroll down.
+  const videoClip = useMotionTemplate`inset(1.25rem calc(100% - ${xPercent}%) calc(100% - ${yPercent}%) 1.25rem)`;
 
   // Numeric readout
   const xVal = useTransform(scrollYProgress, [0.15, 0.65], [412, 750]);
@@ -41,15 +45,17 @@ export default function HomeSystem() {
       <div className="grid grid-cols-1 lg:grid-cols-2 w-full lg:min-h-screen items-stretch">
         {/* Left: full-bleed crosshair image */}
         <div className="lg:border-r border-ink/10 relative min-h-[440px] lg:min-h-0 overflow-hidden bg-grey/30">
-          <video
-            src="https://cdn.sanity.io/files/unkmsg3i/production/cde12660b1d9c1e245bb80b5ab01c77e4793569a.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
+          <motion.div style={{ clipPath: videoClip }} className="absolute inset-0">
+            <video
+              src="/system-control.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            />
+          </motion.div>
 
           {/* Crosshair overlay */}
           <div className="absolute inset-0 pointer-events-none">

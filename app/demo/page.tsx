@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight, Bot, Sparkles, CheckCircle2 } from "lucide-react";
-import Header from "@/components/Header";
+import HomeNav from "@/components/HomeNav";
 import ChatDemo from "@/components/ChatDemo";
 import Footer from "@/components/Footer";
 import AnimatedTitle from "@/components/AnimatedTitle";
@@ -30,9 +30,9 @@ export default function DemoPage() {
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-coral/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-violet/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <Header />
+      <HomeNav />
 
-      <main className="flex-grow font-sans relative z-10 w-full">
+      <main className="flex-grow font-sans relative z-10 w-full pt-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 w-full">
           {/* Context Panel */}
           <motion.div 
