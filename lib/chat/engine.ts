@@ -11,7 +11,7 @@
  */
 
 import { GoogleGenAI, type Content, type FunctionCall, type Part } from "@google/genai";
-import { chatModel, optionalEnv } from "@/lib/env";
+import { chatModel, optionalEnv, publicEnv } from "@/lib/env";
 import { createLogger } from "@/lib/logger";
 import { chatTools } from "@/lib/chat/tools";
 import { buildDemoSystemPrompt, buildLiveSystemPrompt } from "@/lib/chat/system-prompt";
@@ -19,7 +19,6 @@ import { getFaqs } from "@/lib/sanity/queries";
 import { upsertContact } from "@/lib/integrations/hubspot";
 import { sendFounderAlert, sendToLead } from "@/lib/integrations/resend";
 import { contactFounderAlert, contactLeadAutoresponder } from "@/lib/email-templates";
-import { calcomBookingUrl } from "@/lib/integrations/calcom";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/integrations/whatsapp";
 
 const log = createLogger("chat-engine");
@@ -156,10 +155,9 @@ async function executeTool(
 
   switch (call.name) {
     case "book_call": {
-      const name = str(input.name);
-      const email = str(input.email);
       const reason = str(input.reason);
-      const url = calcomBookingUrl({ name, email, notes: reason });
+      // Point visitors at our own booking page (the custom calendar → /api/book), not Cal.com.
+      const url = `${publicEnv.siteUrl}/book`;
       if (demo) {
         return {
           result:
@@ -168,7 +166,7 @@ async function executeTool(
         };
       }
       return {
-        result: "The booking scheduler has been opened for the visitor. Encourage them to pick a time.",
+        result: "The booking page has been shared with the visitor. Encourage them to pick a time.",
         events: [{ type: "action", action: "book_call", url, reason }],
       };
     }
