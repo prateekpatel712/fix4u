@@ -11,6 +11,7 @@
 
 import { after } from "next/server";
 import { createLogger } from "@/lib/logger";
+import { optionalEnv } from "@/lib/env";
 import {
   sendWhatsappText,
   verifyWhatsappSignature,
@@ -52,6 +53,24 @@ interface WaWebhook {
 
 export async function GET(req: Request): Promise<Response> {
   const url = new URL(req.url);
+
+  // Diagnostic (gated by the verify token). Reports config PRESENCE only — never secret values —
+  // so we can debug env-var setup from outside without reading Vercel directly. Safe to leave in.
+  if (url.searchParams.get("diag") && url.searchParams.get("diag") === whatsappVerifyToken()) {
+    const token = optionalEnv("WHATSAPP_TOKEN") || "";
+    return Response.json({
+      cloudConfigured: whatsappCloudConfigured(),
+      hasToken: Boolean(token),
+      tokenLength: token.length,
+      tokenPrefix: token ? token.slice(0, 4) : null,
+      phoneNumberId: optionalEnv("WHATSAPP_PHONE_NUMBER_ID") || null,
+      businessAccountId: optionalEnv("WHATSAPP_BUSINESS_ACCOUNT_ID") || null,
+      hasAppSecret: Boolean(optionalEnv("WHATSAPP_APP_SECRET")),
+      hasVerifyToken: Boolean(optionalEnv("WHATSAPP_VERIFY_TOKEN")),
+      graphVersion: optionalEnv("WHATSAPP_GRAPH_VERSION") || "v21.0 (default)",
+    });
+  }
+
   const mode = url.searchParams.get("hub.mode");
   const token = url.searchParams.get("hub.verify_token");
   const challenge = url.searchParams.get("hub.challenge");
