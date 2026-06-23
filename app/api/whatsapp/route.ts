@@ -26,6 +26,10 @@ export const dynamic = "force-dynamic";
 
 const log = createLogger("api/whatsapp");
 
+// Ignore messages older than this — Meta retries failed deliveries for hours, and we don't want
+// the bot replying to a backlog of stale messages once the endpoint starts working.
+const MAX_MESSAGE_AGE_SEC = 180;
+
 // Dedupe Meta webhook retries (the same message id can be delivered more than once).
 const seen = new Set<string>();
 function markSeen(id: string): boolean {
@@ -44,6 +48,7 @@ interface WaWebhook {
           type?: string;
           from?: string;
           id?: string;
+          timestamp?: string;
           text?: { body?: string };
         }>;
       };
@@ -102,6 +107,9 @@ export async function POST(req: Request): Promise<Response> {
     for (const change of entry.changes ?? []) {
       for (const msg of change.value?.messages ?? []) {
         if (msg.type === "text" && msg.text?.body && msg.from && msg.id) {
+          // Skip stale Meta retries — only respond to recently-sent messages.
+          const ts = Number(msg.timestamp) || 0;
+          if (ts && Date.now() / 1000 - ts > MAX_MESSAGE_AGE_SEC) continue;
           tasks.push({ from: msg.from, text: msg.text.body, id: msg.id });
         }
       }
