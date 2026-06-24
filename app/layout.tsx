@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import ScrollProvider from "@/components/ScrollProvider";
+import FloatingChat from "@/components/FloatingChat";
 import "./globals.css";
 
 const inter = Inter({
@@ -55,6 +56,7 @@ export default function RootLayout({
         <ScrollProvider>
           {children}
         </ScrollProvider>
+        <FloatingChat />
       </body>
     </html>
   );
