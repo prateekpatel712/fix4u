@@ -33,6 +33,8 @@ export default function FloatingChat() {
   const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [isTyping, setIsTyping] = useState(false);
   const [input, setInput] = useState("");
+  // True when the launcher sits over a coral background (hero/footer) — flip it dark so it stays visible.
+  const [onCoral, setOnCoral] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const userMessageCount = messages.filter((m) => m.sender === "user").length;
@@ -42,6 +44,39 @@ export default function FloatingChat() {
     const el = scrollRef.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages, isTyping, open]);
+
+  // Sample the background directly behind the launcher and adapt only when it's coral.
+  useEffect(() => {
+    let raf = 0;
+    const sample = () => {
+      raf = 0;
+      const x = window.innerWidth - 34;
+      const y = window.innerHeight - 34;
+      for (const el of document.elementsFromPoint(x, y)) {
+        if ((el as HTMLElement).closest("[data-chat-widget]")) continue;
+        const m = getComputedStyle(el).backgroundColor.match(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/);
+        if (!m) continue;
+        if ((m[4] === undefined ? 1 : Number(m[4])) === 0) continue; // transparent → look deeper
+        const r = Number(m[1]);
+        const g = Number(m[2]);
+        const b = Number(m[3]);
+        setOnCoral(r > 200 && g < 150 && b < 150); // coral-ish, distinct from ink + paper
+        return;
+      }
+      setOnCoral(false);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(sample);
+    };
+    sample();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   const send = async (raw: string) => {
     const text = raw.trim();
@@ -142,6 +177,7 @@ export default function FloatingChat() {
     <>
       {/* Chat panel */}
       <div
+        data-chat-widget
         className={`fixed z-[100] bottom-24 right-4 left-4 sm:left-auto sm:w-[380px] transition-all duration-300 ${
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
@@ -285,13 +321,22 @@ export default function FloatingChat() {
         </div>
       </div>
 
-      {/* Floating launcher button */}
+      {/* Floating launcher button — flips dark over coral backgrounds so it stays visible */}
       <button
+        data-chat-widget
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed z-[100] bottom-5 right-5 w-14 h-14 rounded-full bg-coral text-ink shadow-2xl shadow-coral/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+        className={`fixed z-[100] bottom-5 right-5 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer ${
+          onCoral ? "bg-ink text-paper shadow-black/40" : "bg-coral text-ink shadow-coral/30"
+        }`}
       >
-        {!open && <span className="absolute inline-flex h-full w-full rounded-full bg-coral opacity-40 animate-ping" />}
+        {!open && (
+          <span
+            className={`absolute inline-flex h-full w-full rounded-full opacity-40 animate-ping ${
+              onCoral ? "bg-ink" : "bg-coral"
+            }`}
+          />
+        )}
         <span className="relative">{open ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}</span>
       </button>
     </>
