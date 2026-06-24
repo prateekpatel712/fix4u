@@ -132,10 +132,10 @@ export default function HomeNav() {
               </span>
             </button>
 
-            {/* Contact — solid box (always readable) */}
+            {/* Contact — solid box with a defined black border */}
             <Link
               href="/book"
-              className="nav__trigger group flex items-stretch bg-ink text-paper font-display font-bold text-sm sm:text-base tracking-wider select-none"
+              className="nav__trigger group flex items-stretch border border-ink bg-ink text-paper font-display font-bold text-sm sm:text-base tracking-wider select-none"
             >
               <span className="flex items-center px-3 sm:px-5">
                 <span className="button__text">
