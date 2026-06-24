@@ -182,37 +182,30 @@ export default function FloatingChat() {
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="flex flex-col h-[62vh] max-h-[540px] border border-white/10 rounded-3xl bg-[#070709]/95 backdrop-blur-2xl shadow-2xl overflow-hidden font-sans">
-          {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06] bg-white/[0.01]">
+        <div className="flex flex-col h-[62vh] max-h-[540px] border border-ink/10 rounded-3xl bg-white shadow-2xl overflow-hidden font-sans">
+          {/* Header — branded coral bar */}
+          <div className="flex items-center justify-between px-5 py-4 bg-coral">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-coral/10 border border-coral/20 flex items-center justify-center">
+              <span className="relative w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0">
                 <Bot className="w-5 h-5 text-coral" />
-              </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald border-2 border-coral" />
+              </span>
               <div>
-                <h3 className="font-display font-semibold text-sm text-paper flex items-center gap-1.5 uppercase tracking-wider">
-                  Fix4U Assistant
-                  <span className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald/65 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald" />
-                  </span>
-                </h3>
-                <p className="text-[9px] text-grey-dark uppercase tracking-widest font-mono mt-0.5 opacity-65">
-                  Online • replies in seconds
-                </p>
+                <h3 className="font-display font-bold text-[15px] text-ink leading-tight">Fix4U Assistant</h3>
+                <p className="text-[11px] text-ink/65 mt-0.5">Online · replies in seconds</p>
               </div>
             </div>
             <button
               onClick={() => setOpen(false)}
               aria-label="Close chat"
-              className="text-grey hover:text-coral transition-colors cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center rounded-full text-ink/70 hover:bg-ink/10 hover:text-ink transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 bg-white">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
@@ -221,8 +214,8 @@ export default function FloatingChat() {
                 <div
                   className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border ${
                     msg.sender === "user"
-                      ? "bg-coral/10 border-coral/20 text-coral"
-                      : "bg-white/[0.02] border-white/[0.05] text-paper"
+                      ? "bg-coral/15 border-coral/30 text-coral"
+                      : "bg-ink/[0.04] border-ink/10 text-ink"
                   }`}
                 >
                   {msg.sender === "user" ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
@@ -232,7 +225,7 @@ export default function FloatingChat() {
                     className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${
                       msg.sender === "user"
                         ? "bg-coral text-ink font-semibold rounded-tr-none"
-                        : "bg-white/[0.02] border border-white/[0.05] text-paper rounded-tl-none"
+                        : "bg-ink/[0.04] border border-ink/10 text-ink rounded-tl-none"
                     }`}
                   >
                     {msg.text}
@@ -253,10 +246,10 @@ export default function FloatingChat() {
 
             {isTyping && (
               <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-lg bg-white/[0.02] border border-white/[0.05] flex items-center justify-center text-paper shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-ink/[0.04] border border-ink/10 flex items-center justify-center text-ink shrink-0">
                   <Bot className="w-3.5 h-3.5" />
                 </div>
-                <div className="bg-white/[0.02] border border-white/[0.05] px-4 py-3 rounded-2xl rounded-tl-none">
+                <div className="bg-ink/[0.04] border border-ink/10 px-4 py-3 rounded-2xl rounded-tl-none">
                   <div className="flex gap-1 items-center h-4">
                     <span className="w-1.5 h-1.5 bg-coral rounded-full animate-bounce delay-100" />
                     <span className="w-1.5 h-1.5 bg-coral rounded-full animate-bounce delay-200" />
@@ -269,12 +262,12 @@ export default function FloatingChat() {
 
           {/* Suggested prompts (before the conversation starts) */}
           {messages.length === 1 && !limitReached && (
-            <div className="px-5 py-3 border-t border-white/[0.03] flex flex-wrap gap-2">
+            <div className="px-5 py-3 border-t border-ink/[0.08] bg-white flex flex-wrap gap-2">
               {SUGGESTED.map((p) => (
                 <button
                   key={p}
                   onClick={() => send(p)}
-                  className="text-xs bg-ink hover:bg-coral hover:text-ink text-grey border border-white/[0.08] rounded-xl px-3 py-2 transition-all font-semibold cursor-pointer"
+                  className="text-xs bg-white hover:bg-coral hover:text-ink text-ink/80 border border-ink/15 rounded-xl px-3 py-2 transition-all font-semibold cursor-pointer"
                 >
                   {p}
                 </button>
@@ -284,8 +277,8 @@ export default function FloatingChat() {
 
           {/* Input — or booking CTA once the demo limit is reached */}
           {limitReached ? (
-            <div className="px-5 py-4 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center gap-3">
-              <p className="text-[11px] text-grey flex-1 leading-relaxed">Let&apos;s keep going on a quick call — it&apos;s free.</p>
+            <div className="px-5 py-4 border-t border-ink/[0.08] bg-white flex flex-col sm:flex-row sm:items-center gap-3">
+              <p className="text-[11px] text-ink/60 flex-1 leading-relaxed">Let&apos;s keep going on a quick call — it&apos;s free.</p>
               <a
                 href="/book"
                 className="shrink-0 inline-flex items-center justify-center gap-1.5 bg-coral text-ink font-bold text-[11px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:scale-[1.02] transition-transform"
@@ -299,7 +292,7 @@ export default function FloatingChat() {
                 e.preventDefault();
                 send(input);
               }}
-              className="px-5 py-4 border-t border-white/[0.06] flex items-center gap-3"
+              className="px-5 py-4 border-t border-ink/[0.08] bg-white flex items-center gap-3"
             >
               <input
                 type="text"
@@ -307,12 +300,12 @@ export default function FloatingChat() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask anything…"
                 disabled={isTyping}
-                className="flex-1 bg-ink/50 border border-white/[0.05] rounded-xl px-4 py-2.5 text-sm text-paper focus:outline-none focus:border-coral transition-colors disabled:opacity-60"
+                className="flex-1 bg-ink/[0.03] border border-ink/15 rounded-xl px-4 py-2.5 text-sm text-ink placeholder:text-ink/40 focus:outline-none focus:border-coral transition-colors disabled:opacity-60"
               />
               <button
                 type="submit"
                 disabled={isTyping || !input.trim()}
-                className="p-2.5 bg-coral text-ink rounded-xl transition-all hover:scale-[1.03] disabled:bg-white/[0.02] disabled:text-grey-dark disabled:scale-100 disabled:cursor-not-allowed cursor-pointer"
+                className="p-2.5 bg-coral text-ink rounded-xl transition-all hover:scale-[1.03] disabled:bg-ink/10 disabled:text-ink/30 disabled:scale-100 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Send className="w-4 h-4" />
               </button>
