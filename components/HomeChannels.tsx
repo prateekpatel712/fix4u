@@ -1,4 +1,4 @@
-import { MessageCircle, Instagram, Globe } from "lucide-react";
+import { MessageCircle, Camera, Globe } from "lucide-react";
 
 const channels = [
   {
@@ -7,7 +7,7 @@ const channels = [
     desc: "Replies to every WhatsApp enquiry in seconds and books the slot — even after hours, while you sleep.",
   },
   {
-    icon: Instagram,
+    icon: Camera,
     title: "Instagram Chatbot",
     desc: "Answers Instagram DMs and story replies instantly, turning your followers into booked appointments.",
   },
