@@ -29,9 +29,6 @@ export default function Footer() {
       title: "Connect",
       links: [
         { label: "WhatsApp", href: whatsappLink(defaultWhatsappMessage()) },
-        { label: "Instagram", href: "https://instagram.com" },
-        { label: "LinkedIn", href: "https://linkedin.com" },
-        { label: "Twitter", href: "https://x.com" },
       ],
     },
   ];
