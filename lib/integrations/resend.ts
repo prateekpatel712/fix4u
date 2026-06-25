@@ -10,7 +10,7 @@
  */
 
 import { Resend } from "resend";
-import { optionalEnv, requireEnv } from "@/lib/env";
+import { optionalEnv } from "@/lib/env";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("resend");
@@ -44,7 +44,11 @@ async function send(args: SendArgs): Promise<SendResult> {
     log.warn("RESEND_API_KEY missing — skipping email send.", { subject: args.subject });
     return { ok: true, skipped: true };
   }
-  const from = requireEnv("EMAIL_FROM");
+  const from = optionalEnv("EMAIL_FROM");
+  if (!from) {
+    log.warn("EMAIL_FROM not set — skipping email send.", { subject: args.subject });
+    return { ok: true, skipped: true };
+  }
   try {
     const { data, error } = await resend.emails.send({
       from,
@@ -66,10 +70,14 @@ async function send(args: SendArgs): Promise<SendResult> {
 }
 
 /** Alert the founder. `replyTo` is set to the lead so the founder can reply directly. */
-export function sendFounderAlert(
+export async function sendFounderAlert(
   args: { subject: string; html: string; text: string; replyTo?: string },
 ): Promise<SendResult> {
-  const to = requireEnv("CONTACT_TO_EMAIL");
+  const to = optionalEnv("CONTACT_TO_EMAIL");
+  if (!to) {
+    log.warn("CONTACT_TO_EMAIL not set — skipping founder alert.");
+    return { ok: true, skipped: true };
+  }
   return send({ to, ...args });
 }
 
