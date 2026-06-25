@@ -2,8 +2,9 @@
  * Cloudflare Turnstile server-side verification (PRD §2.3, Tech Spec §9).
  *
  * Every form route calls `verifyTurnstile()` before doing any work. If the secret isn't
- * configured we fail OPEN in development (so local testing isn't blocked) but fail CLOSED in
- * production (so a misconfigured deploy can't silently disable spam protection).
+ * configured we fail OPEN (spam protection simply off — the honeypot field still guards forms),
+ * and it auto-enforces the moment TURNSTILE_SECRET_KEY is set. Once configured, a failed/invalid
+ * token is rejected.
  */
 
 import { optionalEnv } from "@/lib/env";
@@ -24,11 +25,7 @@ export async function verifyTurnstile(
   const secret = optionalEnv("TURNSTILE_SECRET_KEY");
 
   if (!secret) {
-    if (process.env.NODE_ENV === "production") {
-      log.error("TURNSTILE_SECRET_KEY missing in production — rejecting submission.");
-      return { success: false, reason: "spam_protection_unconfigured" };
-    }
-    log.warn("TURNSTILE_SECRET_KEY missing — skipping verification (dev only).");
+    log.warn("TURNSTILE_SECRET_KEY not set — skipping spam verification (honeypot still active). Set it to enable Turnstile.");
     return { success: true };
   }
 
