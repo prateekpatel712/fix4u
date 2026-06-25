@@ -390,10 +390,10 @@ export default function BookingEmbed() {
               <CheckCircle className="w-8 h-8" />
             </div>
             <h3 className="font-display font-black text-2xl text-paper uppercase tracking-wide">
-              Meeting Confirmed! 🎉
+              Request Received! 🎉
             </h3>
             <p className="text-grey-dark text-xs sm:text-sm leading-relaxed">
-              Hey <span className="text-paper font-semibold">{formData.name}</span>, your slot for a 15-minute discovery call has been secured for:
+              Thanks <span className="text-paper font-semibold">{formData.name}</span> — we&apos;ve got your request for a 15-minute discovery call:
             </p>
             <div className="w-full bg-white/[0.01] border border-white/[0.06] rounded-2xl py-5 px-6 flex flex-col gap-1 text-center font-mono">
               <span className="text-coral font-bold text-base">{selectedDate && fmtDate(selectedDate)}</span>
@@ -402,7 +402,7 @@ export default function BookingEmbed() {
             </div>
             <div className="text-xs text-grey-dark leading-relaxed mt-2 flex items-center gap-1.5 justify-center">
               <Sparkles className="w-3.5 h-3.5 text-coral shrink-0" />
-              Calendar invite sent to <span className="text-paper font-semibold">{formData.email}</span>
+              We&apos;ll confirm your slot shortly at <span className="text-paper font-semibold">{formData.email}</span>
             </div>
             <button
               type="button"
