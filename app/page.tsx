@@ -9,6 +9,7 @@ import HeroVideo from "@/components/HeroVideo";
 import HomeVision from "@/components/HomeVision";
 import HomeSchema from "@/components/HomeSchema";
 import HomeStack from "@/components/HomeStack";
+import HomeChannels from "@/components/HomeChannels";
 import ChatDemo from "@/components/ChatDemo";
 import RoiCalculator from "@/components/RoiCalculator";
 import HomeValue from "@/components/HomeValue";
@@ -47,6 +48,9 @@ export default function Home() {
 
         {/* Stacking Services Stack */}
         <HomeStack />
+
+        {/* Channels — WhatsApp / Instagram / Website chatbots */}
+        <HomeChannels />
 
         {/* Live Chatbot Sandbox Trial */}
         <section className="border-b border-white/10 bg-ink relative w-full">
